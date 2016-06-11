@@ -1,23 +1,13 @@
-<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<html><head><link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 
-<dom-module id="station-list">
+</head><body><dom-module id="station-list">
 
   <template>
-    <style>
-     .selector {
-         width: 250px;
-     }
-    </style>
+    <style>.selector{width:250px;}</style>
 
-    <paper-dropdown-menu value="{{value}}"
-                         class="selector"
-                         label="[[label]]"
-                         required$="[[required]]"
-                         vertical-align$="[[vertical-align]]"
-                         aria-label$="[[aria-label]]"
-                         horizontal-align$="[[horizontal-align]]">
+    <paper-dropdown-menu value="{{value}}" class="selector" label="[[label]]" required$="[[required]]" vertical-align$="[[vertical-align]]" aria-label$="[[aria-label]]" horizontal-align$="[[horizontal-align]]">
       <paper-listbox id="box" class="dropdown-content">
         <template is="dom-repeat" items="[[stations]]" as="station">
           <paper-item>[[station]]</paper-item>
@@ -113,3 +103,4 @@
    });
   </script>
 </dom-module>
+</body></html>

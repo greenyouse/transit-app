@@ -1,0 +1,115 @@
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<dom-module id="station-list">
+
+  <template>
+    <style>
+     .selector {
+         width: 250px;
+     }
+    </style>
+
+    <paper-dropdown-menu value="{{value}}"
+                         class="selector"
+                         label="[[label]]"
+                         required$="[[required]]"
+                         vertical-align$="[[vertical-align]]"
+                         aria-label$="[[aria-label]]"
+                         horizontal-align$="[[horizontal-align]]">
+      <paper-listbox id="box" class="dropdown-content">
+        <template is="dom-repeat" items="[[stations]]" as="station">
+          <paper-item>[[station]]</paper-item>
+        </template>
+      </paper-listbox>
+    </paper-dropdown-menu>
+
+  </template>
+
+  <script>
+   Polymer({
+
+     is: 'station-list',
+
+     properties: {
+       /**
+        * a list of the station names
+        */
+       stations: {
+         type: Array,
+         value: function() {
+           return app.stationNames;
+         }
+       },
+
+       /**
+        * Whether to use geolocaiton for selecting the nearest station
+        */
+       useLocation: {
+         type: Boolean,
+         value: false
+       },
+
+       value: {
+         type: String,
+         notify: true
+       }
+     },
+
+     observers: [
+       '_closestStation(stations)'
+     ],
+
+     /**
+      * Cartesian distance
+      * @param {Number} lat1 Latitude of the first point
+      * @param {Number} long1 Longitude of the first point
+      * @param {Number} lat2 Latitude of the second point
+      * @param {Number} long2 Longitude of the second point
+      */
+     _distance: function(lat1, long1, lat2, long2) {
+       var lat = lat1 - lat2,
+           long = long1 - long2;
+       return Math.sqrt(Math.pow(lat, 2) + Math.pow(long, 2));
+     },
+
+     ready: function() {
+       if (this.useLocation) this._closestStation(this.stations);
+     },
+
+     /**
+      * Find the station closest to the current geolocation and select it
+      *
+      * @param {Array<Strings>} stations A list of stations names
+      */
+     _closestStation: function(stations) {
+       // ignore this feature if it's not supported by the browser or location isn't used
+       if (!"geolocation" in navigator || this.useLocation != true) return;
+
+       navigator.geolocation.getCurrentPosition(position => {
+         var lat = position.coords.latitude,
+             long = position.coords.longitude;
+
+         var stationRecords = app.stations.filter(s => {
+           return stations.indexOf(s.title) != -1;
+         });
+
+         var closestStation = stationRecords.reduce((prev, cur) => {
+           var newDist = this._distance(lat, long, cur.latitude, cur.longitude);
+
+           if (newDist < prev.distance || !prev.distance) {
+             cur.distance = newDist;
+             return cur;
+           } else {
+             return prev
+           }
+         });
+
+         var index = stations.indexOf(closestStation.title);
+         this.$.box.selected = index;
+       });
+     }
+   });
+  </script>
+</dom-module>

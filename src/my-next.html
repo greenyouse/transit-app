@@ -1,0 +1,325 @@
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="station-list.html">
+
+<dom-module id="my-next">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+      }
+
+      .card {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        padding: 16px;
+        margin: 24px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #757575;
+      }
+
+      h1 {
+        font-size: 22px;
+        margin: 16px 0;
+        color: #212121;
+      }
+
+     *[hidden] {
+         display: none;
+     }
+
+     .menu {
+         display: flex;
+         flex-wrap: wrap;
+         justify-content: space-around;
+         align-items: center;
+     }
+
+     .menu--vertical {
+         flex-direction: column;
+     }
+
+     .menu--horizontal {
+         flex-direction: row;
+     }
+
+     .menu--horizontal > * {
+         margin-left: 30px;
+     }
+
+     .menu > * {
+         margin-bottom: 20px;
+         flex: 0 1 auto;
+     }
+
+     table {
+         border-collapse: collapse;
+     }
+
+     td, th {
+         border: 1px solid #212121;
+         padding: 0.5rem;
+         text-align: left;
+     }
+
+     th, .black {
+         color: black;
+     }
+
+     .warning {
+         color: red;
+     }
+    </style>
+
+    <div class="card">
+      <div class="menu menu--vertical">
+        <h1>Next Departures</h1>
+        <h3>Find the next departures for your station</h3>
+        <div class="menu menu--horizontal">
+          <div class="menu__item">
+            <paper-dropdown-menu label="Route">
+              <paper-listbox class="dropdown-content"
+                             selected="{{route}}"
+                             attr-for-selected="name"
+                             aria-label="Route Selector">
+                <paper-item name="blue">Blue Line</paper-item>
+                <paper-item name="green">Green Line</paper-item>
+                <paper-item name="northstar">Northstar</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </div>
+          <div class="menu__item" hidden$="[[!_routePicked]]">
+            <label id="directionLabel">Direction: </label>
+            <paper-radio-group selected="{{direction}}" aria-labelledby="directionLabel">
+              <paper-radio-button hidden$="[[!_showNS]]" name="N">North</paper-radio-button>
+              <paper-radio-button hidden$="[[!_showNS]]" name="S">South</paper-radio-button>
+              <paper-radio-button hidden$="[[_showNS]]" name="E">East</paper-radio-button>
+              <paper-radio-button hidden$="[[_showNS]]" name="W">West</paper-radio-button>
+            </paper-radio-group>
+          </div>
+          <div class="menu__item" hidden$="[[!_directionPicked]]">
+            <station-list label="Station"
+                          value="{{station}}"
+                          stations="{{filteredStations}}"
+                          use-location>
+            </station-list>
+          </div>
+        </div>
+        <br>
+        <section hidden$="[[!tripLoaded]]">
+          <h3 class="menu__item black">Next trip departs [[nextTrip]]</h3>
+          <h5 class="menu__item black">Current Time: [[currentTime]]</h5>
+          <p class="warning" hidden$="[[online]]">App is offline, actual trip times may vary</p>
+          <table>
+            <tr>
+              <thead>
+                <th scope="col">Route</th><th scope="col">Departs</th>
+              </thead>
+            </tr>
+            <template is="dom-if" if="[[online]]">
+              <template is="dom-repeat" items="[[departureTimes]]" as="trip">
+                <tr><td>[[trip.Description]]</td><td>[[trip.DepartureText]]</td></tr>
+              </template>
+            </template>
+
+            <template is="dom-if" if="[[!online]]">
+              <template is="dom-repeat" items="[[departureTimes]]" as="trip">
+                <tr><td>[[route]]</td><td>[[trip]]</td></tr>
+              </template>
+            </template>
+          </table>
+        </section>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'my-next',
+
+      properties: {
+        /**
+         * Trip route: green, blue, or northstar
+         */
+        route: {
+          type: String,
+          notify: true
+        },
+
+        _routePicked: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * The trip direction: N,S,E, or W
+         */
+        direction: {
+          type: String
+        },
+
+        _directionPicked: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * Whether to show North/South or East/West directions, true shows North/South
+         */
+        _showNS: {
+          type: Boolean
+        },
+
+        /**
+         * Stations that match the given route and direction info
+         */
+        filteredStations: {
+          type: Array,
+          notify: true
+        },
+
+        /**
+         * The station for the trip
+         */
+        station: {
+          type: String,
+          notify: true
+        },
+
+        tripLoaded: {
+          type: Boolean,
+          value: false
+        },
+
+        nextTrip: {
+          type: String
+        },
+
+        currentTime: {
+          type: String,
+          value: function() {
+            moment().format("hh:mm:a");
+          }
+        },
+
+        departureTimes: {
+          type: Array,
+          notify: true
+        },
+
+        online: {
+          type: Boolean,
+          value: function() {
+            return app.online;
+          },
+          notify: true
+        }
+      },
+
+      observers: [
+        'displayDirection(route)',
+        'filterStations(route, direction)',
+        'fetchDepartures(route, direction, station)'
+      ],
+
+
+      /**
+       * Show North/South or East/West directions depending on the route
+       * @param {String} route The train route selected
+       */
+      displayDirection: function(route) {
+        route == "green" ? this._showNS = false : this._showNS = true;
+        this._routePicked = true;
+      },
+
+      filterStations: function(route, direction) {
+        var stations = app.stations.filter(s => {
+          return s.route == route && s.direction == direction;
+        });
+
+        this.filteredStations = app.listStations(stations);
+        this._directionPicked = true;
+      },
+
+      /**
+       * Return the weekday period: Saturday, Sunday, or Weekday
+       */
+      weekPeriod: function() {
+        var now = moment();
+        var day = moment.localeData().weekdays(now);
+
+        if (day == "Saturday" || day == "Sunday")
+          return day;
+
+        return "Weekday";
+      },
+
+      offlineSchedule: function(route, direction, station) {
+        var data = this.scheduleData,
+            id = app.stations.filter(s => {
+              return s.direction == direction && s.route == route && s.title == station;
+            })[0].id,
+            day = this.weekPeriod(),
+            date = new Date();
+
+        var times = data[id][day]
+
+        times.filter(t => {
+          var time = moment(t, "HH:mm").toDate();
+          return time > date;
+        });
+
+        times = times.slice(0,5);
+
+        var times = times.map(t => {
+          return moment(t, "HH:mm").format("hh:mm:a");
+        });
+
+        this.nextTrip = times[0];
+        this.departureTimes = times;
+        this.currentTime = moment().format("hh:mm:a");
+        this.tripLoaded = true;
+
+        this.scheduleLoaded = true;
+      },
+
+      fetchDepartures: function(route, direction, station) {
+        if (!this.online)
+          this.offlineSchedule(route, direction, station);
+
+        var stationID = app.stations.filter(s => {
+          return s.direction == direction && s.title == station;
+        })[0].id;
+
+        var url = new URL("http://svc.metrotransit.org/NexTrip/" + stationID + "?format=json");
+
+        fetch(url).then(resp => {
+          resp.json().then(trips => {
+            var next = trips[0].DepartureText;
+            if (next == "Due") next = "now";
+
+            this.nextTrip = next;
+            this.departureTimes = trips;
+            this.currentTime = moment().format("hh:mm:a");
+            this.tripLoaded = true;
+          })
+        }).catch(e => {
+          console.log("error fetching departures: " + e);
+        });
+      }
+
+    });
+  </script>
+
+  <script type="text/javascript" src="../bower_components/moment/moment.js"></script>
+</dom-module>

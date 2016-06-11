@@ -1,0 +1,414 @@
+<link rel="import" href="../bower_components/google-map/google-map.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/greenyouse-datetime-local-input/datetime-local-input.html">
+<link rel="import" href="map-directions.html">
+<link rel="import" href="station-list.html">
+
+<dom-module id="my-planner">
+
+  <template>
+
+    <style>
+     :host {
+         display: block;
+         padding: 10px;
+         --paper-tab-content: {
+             color: black;
+             background-color: cadetblue;
+         }
+         --paper-tabs-selection-bar-color: white;
+         --paper-tabs: {
+             border-radius: 5%;
+         }
+     }
+
+     .card {
+         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+         padding: 16px;
+         margin: 24px;
+         border-radius: 5px;
+         background-color: #fff;
+         color: #757575;
+     }
+
+     h1 {
+         font-size: 22px;
+         margin: 16px 0;
+         color: #212121;
+     }
+
+     *[hidden] {
+         display: none;
+     }
+
+     .center {
+         text-align: center;
+     }
+
+     .warning {
+         color: red;
+     }
+
+     .warning__text {
+         color: black;
+     }
+
+     #directionsPanel select, #directionsPanel input {
+         font-size: 15px;
+     }
+
+     #directionsPanel select {
+         width: 100%;
+     }
+
+     #directionsPanel i {
+         font-size: 12px;
+     }
+
+     .menu, .menu__item, .menu__title {
+         display: flex;
+         flex-direction: column;
+         justify-content: flex-start;
+     }
+
+     .menu__title {
+         align-items: center;
+     }
+
+     .menu > *,
+     .menu__item > *,
+     .menu__title > * {
+         margin-bottom: 10px;
+         flex: 1 1 auto;
+     }
+
+     .menu__row {
+         display: flex;
+         flex-flow: row wrap;
+         justify-content: space-around;
+     }
+
+     .menu__row > * {
+         flex: 0 1 auto;
+     }
+
+     .menu__row--map {
+         display: flex;
+         flex-flow: row wrap;
+         justify-content: center;
+     }
+
+     .menu__row--map > * {
+         flex: 1 1 auto;
+         align-self: auto;
+         margin-right: 30px;
+         margin-bottom: 30px;
+     }
+
+     #directionsPanel {
+         line-height: 30px;
+         color: black;
+     }
+
+     .selector {
+         width: 250px;
+     }
+
+     .selector--small {
+         width: 100px;
+     }
+
+     @media screen and (min-width: 1440px) {
+         section {
+             margin-right: 10%;
+             margin-left: 10%;
+         }
+
+     }
+
+     /* Styling for the map and directions across screen sizes */
+     @media screen and (max-width: 768px) {
+         google-map {
+             height: 50vw;
+         }
+     }
+
+     @media screen and (min-width: 768px) {
+         google-map {
+             height: 50vw;
+             min-width: 20vw;
+         }
+
+         #directionsPanel {
+             max-width: 20vw;
+         }
+     }
+
+    </style>
+
+    <div class="card">
+      <div class="center" hidden$="[[online]]">
+        <h3 class="warning">App is offline!</h3>
+        <p class="warning__text">For trip directions by phone, call Metro Transit at 612-373-3333</p>
+      </div>
+      <div hidden$="[[!online]]">
+        <section class="menu">
+          <div class="menu__title">
+            <h1>Trip Planner</h1>
+            <h3>Enter your trip details below</h3>
+          </div>
+          <div class="menu__row">
+            <div>
+              <station-list label="From" value="{{startAddress}}" use-location required></station-list>
+            </div>
+            <div>
+              <station-list label="To" value="{{endAddress}}" required></station-list>
+            </div>
+            <div>
+
+              <div class="menu__item">
+                <paper-tabs label="Time Selection"
+                            selected="{{_timeType}}"
+                            attr-for-selected="index"
+                            aria-label="Arrival/Departure Selector">
+                  <paper-tab index=0>Leave At</paper-tab>
+                  <paper-tab index=1>Arrive At</paper-tab>
+                </paper-tabs>
+
+                <datetime-local-input value="{{departureTime}}"
+                                      class="selector"
+                                      label="Departure Time"
+                                      auto-validate
+                                      required
+                                      hidden$="{{_useDepart}}"></datetime-local-input>
+                <datetime-local-input value="{{arrivalTime}}"
+                                      class="selector"
+                                      label="Arrival Time"
+                                      auto-validate
+                                      required
+                                      hidden$="{{_useArrival}}"></datetime-local-input>
+              </div>
+            </div>
+          </div>
+          <template is="dom-if" if="[[directionsLoaded]]">
+            <h3>Trip Directions:</h3>
+            <div class="menu__row--map">
+              <google-map map="{{map}}"></google-map>
+              <map-directions map="{{map}}"
+                              id="directionsPanel"
+                              start-address="{{startCoords}}"
+                              end-address="{{endCoords}}"
+                              travel-mode="TRANSIT"
+                              arrival-time="[[arrivalTime]]"
+                              departure-time="[[departureTime]]"
+                              use-arrival="[[_useArrival]]"
+                              directions-panel>
+              </map-directions>
+            </div>
+          </template>
+        </section>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+
+   Polymer({
+
+     is: 'my-planner',
+
+     properties: {
+       /**
+        * Starting station's name
+        */
+       startAddress: {
+         type: String,
+         notify: true
+       },
+
+       startCoords: {
+         type: String,
+         nofity: true
+       },
+
+       /**
+        * Destination station's name
+        */
+       endAddress: {
+         type: String,
+         notify: true
+       },
+
+       endCoords: {
+         type: String,
+         nofity: true
+       },
+
+       /**
+        * Starting station record
+        */
+       origin: {
+         type: Object,
+       },
+
+       /**
+        * Destination station record
+        */
+       destination: {
+         type: Object
+       },
+
+       /**
+        * The selected time input to use. options are:
+        *   0 - use departure, current time
+        *   1 - use arrival, 1 hour from now
+        */
+       _timeType: {
+         type: String,
+         value: "0",
+         notify: true
+       },
+
+       _useDepart: {
+         type: Boolean,
+         value: true
+       },
+
+       _useArrival: {
+         type: Boolean,
+         value: true
+       },
+
+       departureTime: {
+         type: String,
+         notify: true
+       },
+
+       arrivalTime: {
+         type: String,
+         notify: true,
+         value: function() {
+           return moment().add(1, 'hours').format('YYYY-MM-DDTHH:mm')
+         }
+       },
+
+       map: {
+         type: Object
+       },
+
+       online: {
+         type: Boolean,
+         value: function() {
+           return app.online;
+         },
+         notify: true
+       },
+
+       directionsLoaded: {
+         type: Boolean,
+         value: false,
+         notify: true
+       }
+
+     },
+
+     observers: [
+       '_setTimeType(_timeType)',
+       '_setCoords(startAddress, endAddress)'
+     ],
+
+     ready: function() {
+       this.online = app.online;
+     },
+
+     /**
+      * Set which time input to show and set trip time params
+      *
+      * @param {Number} type - value of this.timeType
+      */
+     _setTimeType: function(type) {
+       switch (type) {
+         case "0":
+           this._useDepart = false;
+           this._useArrival = true;
+           break;
+         case "1":
+           this._useDepart = true;
+           this._useArrival = false;
+           break;
+       }
+     },
+
+     /**
+      * Get full record for a given station
+      */
+     _stationLookup: function(stationName) {
+       for (var i = 0; i < app.stations.length; i++) {
+         var station = app.stations[i];
+
+         // don't need exact platform direction, the station is good enough
+         if (stationName == station.title) {
+           return station;
+         }
+       }
+     },
+
+     _getCoords: function(stationName) {
+       var station = this._stationLookup(stationName);
+
+       var lat = station.latitude,
+           long = station.longitude;
+
+       return lat + ", " + long;
+     },
+
+     _setCoords: function(start, end) {
+       if (start && end) {
+         this.startCoords = this._getCoords(this.startAddress);
+         this.endCoords = this._getCoords(this.endAddress);
+
+         this.directionsLoaded = true;
+       }
+     },
+
+     /**
+      * Calculates the trip direction based on route and station info
+      *
+      * @param {Object} origin
+      * @param {Object} destination
+      * @return String The direction: N,S,E,W
+      */
+     /* _getDirection: function(origin, destination) {
+        if (origin.route == destination.route) {
+        var stops = app.routes[origin.route];
+
+        if (origin.route == "blue" || "northstar") {
+        return stops.indexOf(origin.title) < stops.indexOf(destination.title) ? "N" : "S"
+        } else {
+        return stops.indexOf(origin.title) < stops.indexOf(destination.title) ? "W" : "E"
+        }
+        } else if ()
+        }, */
+
+     /* _offlineDirections: function(origin, destination) {
+        var startRoute = origin.route,
+        endRoute = origin.route;
+
+        // find route directions based on lat/long comparison when same route else route comparison
+        // if they're the same, get on next train for route
+        // green <-> blue, next train for route, stop at Gov and switch trains
+        // green/blue <-> both, next train for route
+        // green/blue/both <-> northstar, next train for route, transfer at target field
+
+        var start = this._stationLookup(origin),
+        end = this._stationLookup(destination);
+        } */
+
+   });
+  </script>
+  <script type="text/javascript" src="../bower_components/moment/moment.js"></script>
+
+</dom-module>

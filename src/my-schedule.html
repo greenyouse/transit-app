@@ -1,0 +1,321 @@
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<!-- TODO: use custom tab styling -->
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<!-- TODO: refactor the shared behavior so there's not copy/paste code -->
+
+<dom-module id="my-schedule">
+
+  <template>
+    <style is="schedule-style" include="iron-flex iron-flex-alignment">
+     :host {
+         display: block;
+         padding: 10px;
+         --paper-tab-content: {
+             background-color: cadetblue;
+         }
+         --paper-tabs-selection-bar-color: white;
+         --paper-tabs: {
+             border-radius: 5%;
+         }
+     }
+
+     .card {
+         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+         padding: 16px;
+         margin: 24px;
+         border-radius: 5px;
+         background-color: #fff;
+         color: #757575;
+     }
+
+     h1 {
+         font-size: 22px;
+         margin: 16px 0;
+         color: #212121;
+     }
+
+     *[hidden] {
+         display: none !important;
+     }
+
+     .flex > * {
+         margin-bottom: 20px;
+     }
+
+     paper-tab {
+         width: 100px;
+         color: black;
+     }
+
+     table {
+         border-collapse: collapse;
+         border-spacing: 0;
+         background-color: white;
+         line-height: 1em;
+         font-size: 8pt;
+         color: black;
+     }
+
+     td {
+         border: 1px solid lightgrey;
+         text-align: center;
+         font-size: 6pt;
+         padding: 3px;
+     }
+
+     tbody tr td:nth-child(odd) {
+         background-color: #ccc;
+     }
+
+     /* TODO:
+        - improve mobile rendering
+        - make the table header sticky but still align with the table body
+      */
+
+     /* table header style from https://css-tricks.com/rotated-table-column-headers/ */
+     th.rotate {
+         height: 140px;
+         white-space: nowrap;
+     }
+
+     th.rotate > div {
+         transform:
+         translate(25px, 51px)
+         rotate(315deg);
+         width: 30px;
+     }
+
+     th.rotate > div > span {
+         border-top: 1px solid #ccc;
+         border-bottom: 1px solid #ccc;
+         padding: 5px 10px;
+     }
+
+     .scrollableTable {
+         height: 300px;
+         overflow: auto;
+     }
+    </style>
+
+    <div class="card flex layout vertical center center-justified wrap">
+      <h1>Train Schedules</h1>
+      <br>
+      <paper-dropdown-menu label="Route">
+        <paper-listbox class="dropdown-content"
+                       selected="{{route}}"
+                       attr-for-selected="name"
+                       aria-label="Route Selector">
+          <paper-item name="blue">Blue Line</paper-item>
+          <paper-item name="green">Green Line</paper-item>
+          <paper-item name="northstar">Northstar</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+
+      <div class="flex layout center horizontal around-justified wrap self-stretch" hidden$="[[!_routePicked]]">
+        <paper-tabs label="Direction" selected="{{direction}}" attr-for-selected="name">
+          <paper-tab hidden$="[[!_showNS]]" name="N">North</paper-tab>
+          <paper-tab hidden$="[[!_showNS]]" name="S">South</paper-tab>
+          <paper-tab hidden$="[[_showNS]]" name="E">East</paper-tab>
+          <paper-tab hidden$="[[_showNS]]" name="W">West</paper-tab>
+        </paper-tabs>
+
+        <paper-tabs label="Day" selected="{{day}}" attr-for-selected="name">
+          <paper-tab name="Weekday">Weekday</paper-tab>
+          <paper-tab name="Saturday">Saturday</paper-tab>
+          <paper-tab name="Sunday">Sunday</paper-tab>
+        </paper-tabs>
+      </div>
+
+      <section hidden$="[[!scheduleLoaded]]">
+        <div class="scrollableTable">
+          <table border="0" cell-padding="0" cell-spacing="0">
+            <thead>
+              <tr>
+                <template is="dom-repeat" items="[[titles]]" as="title">
+                  <th class="rotate"><div><span>[[title]]</span></div></th>
+                </template>
+              </tr>
+            </thead>
+            <tbody>
+              <template is="dom-repeat" items="[[schedules]]" as="schedule">
+                <tr>
+                  <template is="dom-repeat" items="[[schedule]]" as="time">
+                    <td>[[time]]</td>
+                  </template>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+  </template>
+
+  <script>
+
+   Polymer({
+
+     is: 'my-schedule',
+
+     properties: {
+       route: {
+         type: String,
+         notify: true
+       },
+
+       _routePicked: {
+         type: Boolean,
+         value: false
+       },
+
+       /**
+        * Whether to show North/South or East/West directions, true shows North/South
+        */
+       _showNS: {
+         type: Boolean
+       },
+
+       /**
+        * The trip direction: N,S,E, or W
+        */
+       direction: {
+         type: String,
+         notify: true
+       },
+
+       _directionPicked: {
+         type: Boolean
+       },
+
+       day: {
+         type: String,
+         notify: true,
+         value: function() {
+           return "Weekday";
+         }
+       },
+
+       /**
+        * Stations that match the given route and direction info
+        */
+       filteredStations: {
+         type: Array,
+         notify: true
+       },
+
+       titles: {
+         type: Array,
+         notify: true
+       },
+
+       schedules: {
+         type: Array,
+         notify: true
+       },
+
+       scheduleLoaded: {
+         type: Boolean,
+         value: false
+       }
+     },
+
+     observers: [
+       'displayDirection(route)',
+       'filterStations(route, direction)',
+       'fetchSchedule(route, direction, day)'
+     ],
+
+     /**
+      * Show North/South or East/West directions depending on the route
+      * @param {String} route The train route selected
+      */
+     displayDirection: function(route) {
+       if (route == "green") {
+         this.direction = "E";
+         this._showNS = false;
+       } else {
+         this.direction = "N";
+         this._showNS = true;
+       }
+
+       this._routePicked = true;
+     },
+
+
+     filterStations: function(route, direction) {
+       var stations = app.stations.filter(s => {
+         return s.route == route && s.direction == direction;
+       });
+
+       this.filteredStations = app.listStations(stations);
+       this._directionPicked = true;
+     },
+
+     largestSubVec: function(coll) {
+       return coll.reduce((n, arr) => {
+         var size = arr.length;
+         return n > size? n : size;
+       });
+     },
+
+     flip2dArray: function(coll) {
+       var i, j,
+           arr = [],
+           subarray = [],
+           maxSize = this.largestSubVec(coll);
+
+       for (i = 0; i < maxSize; i++) {
+         for (j = 0; j < coll.length; j++) {
+           var x = coll[j][i] || "-";
+           subarray.push(x);
+         };
+
+         arr.push(subarray);
+         subarray = [];
+       };
+
+       return arr;
+     },
+
+     // TODO: convert army time to 12 hr fmt
+     // TODO: double-check target field platform 1 times
+     fetchSchedule: function(route, direction, day) {
+       var data = this.scheduleData,
+           matched = app.stations.filter(s => {
+             return s.direction == direction && s.route == route;
+           });
+
+       matched.sort(function(a, b) {
+         var pos1 = a.position,
+             pos2 = b.position;
+
+         if (pos1 < pos2)
+           return -1;
+         if (pos1 > pos2)
+           return 1;
+         return 0;
+       });
+
+       this.titles = matched.map(s => {
+         return s.title;
+       });
+
+       var schedules = matched.map(s => {
+         var id = s.id;
+         return data[id][day];
+       });
+
+       this.schedules = this.flip2dArray(schedules);
+
+       this.scheduleLoaded = true;
+     }
+   });
+
+  </script>
+
+</dom-module>

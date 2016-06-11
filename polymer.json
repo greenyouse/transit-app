@@ -1,0 +1,9 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/transit-app.html",
+  "fragments": [
+    "src/my-planner.html",
+    "src/my-schedule.html",
+    "src/my-next.html"
+  ]
+}

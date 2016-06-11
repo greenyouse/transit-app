@@ -1,0 +1,225 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="my-icons.html">
+
+<dom-module id="transit-app">
+
+  <template>
+
+    <style>
+
+     :host {
+         display: block;
+         --app-primary-color: #7A7BDE;
+         --app-secondary-color: black;
+         --paper-tab: {
+             padding: 0px 0px;
+         }
+         --paper-tab-content: {
+             background-color: var(--app-primary-color);
+         }
+     }
+
+     app-header {
+         background-color: var(--app-primary-color);
+         color: #fff;
+     }
+
+     app-header paper-icon-button {
+         --paper-icon-button-ink-color: white;
+     }
+
+     .drawer-list {
+         margin: 0 20px;
+     }
+
+     .drawer-list a {
+         display: block;
+         padding: 0 16px;
+         line-height: 40px;
+         text-decoration: none;
+         color: var(--app-secondary-color);
+     }
+
+     .drawer-list a.iron-selected {
+         color: black;
+         font-weight: bold;
+     }
+
+     .drawer-list a.subroute {
+         padding-left: 32px;
+     }
+
+     .logo {
+         text-align: center;
+     }
+
+     .logo a {
+         font-size: 16px;
+         font-weight: 600;
+         letter-spacing: 0.3em;
+         color: black;
+         text-decoration: none;
+         /* required for IE 11, so this <a> can receive pointer events */
+         display: inline-block;
+         pointer-events: auto;
+     }
+
+     .left-bar-item {
+         width: 40px;
+     }
+
+     iron-pages {
+         max-width: 1440px;
+         margin: 0 auto;
+     }
+
+     app-drawer {
+         z-index: 3;
+     }
+
+    </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"></app-route>
+
+    <iron-media-query query="max-width: 767px" query-matches="{{smallScreen}}"></iron-media-query>
+
+    <app-header role="navigation" id="header" effects="waterfall" condenses reveals>
+      <app-toolbar>
+        <div class="left-bar-item" hidden$="[[!smallScreen]]">
+          <paper-icon-button
+              class="menu-btn"
+              icon="menu"
+              on-tap="_toggleDrawer"
+              aria-label="App Menu">
+          </paper-icon-button>
+        </div>
+        <div class="logo" title><a href="/" aria-label="Transit Home">Twin Cities Transit</a></div>
+      </app-toolbar>
+    </app-header>
+
+    <!-- Tabs for large screens -->
+    <div id="tabContainer">
+      <template is="dom-if" if="[[!smallScreen]]">
+        <!-- TODO: change ugly style to something more neutral -->
+        <paper-tabs selected="{{page}}" attr-for-selected="name">
+          <paper-tab name="planner">
+            <iron-icon icon="maps:directions-transit"></iron-icon>
+            Trip Planner</paper-tab>
+          <paper-tab name="schedule">
+            <iron-icon icon="icons:schedule"></iron-icon>
+            Train Schedules</paper-tab>
+          <paper-tab name="next">
+            <iron-icon icon="maps:place"></iron-icon>
+            Next Departures</paper-tab>
+        </paper-tabs>
+      </template>
+    </div>
+
+    <!-- Drawer content for small screens -->
+    <template is="dom-if" if="[[smallScreen]]">
+      <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
+        <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
+          <a name="planner">Trip Planner</a>
+          <a name="schedule">Train Schedules</a>
+          <a name="next">Next Departures</a>
+        </iron-selector>
+      </app-drawer>
+    </template>
+
+    <iron-pages role="main" selected="{{page}}" attr-for-selected="name">
+      <my-planner name="planner"></my-planner>
+      <my-schedule name="schedule" schedule-data="{{scheduleData}}"></my-schedule>
+      <my-next name="next" schedule-data="{{scheduleData}}"></my-next>
+    </iron-pages>
+
+    <iron-ajax url="schedule.json" last-response="{{scheduleData}}" auto></iron-ajax>
+
+  </template>
+
+  <script>
+
+   Polymer({
+
+     is: 'transit-app',
+
+     properties: {
+
+       page: {
+         type: String,
+         reflectToAttribute: true,
+         observer: '_pageChanged'
+       },
+
+       routeData: {
+         type: Object
+       },
+
+       route: {
+         type: Object
+       },
+
+       subroute: {
+         type: Object
+       },
+
+       smallScreen: {
+         type: Boolean
+       },
+
+       scheduleData: {
+         type: Array
+       }
+     },
+
+     observers: [
+       '_routePageChanged(routeData.page)'
+     ],
+
+     _routePageChanged: function(page) {
+       this.page = page || 'planner';
+     },
+
+     _pageChanged: function(page) {
+       // load page import on demand.
+       this.importHref(
+         this.resolveUrl('my-' + page + '.html'), null, null, true);
+     },
+
+     _toggleDrawer: function() {
+       this.drawerOpened = !this.drawerOpened;
+     }
+
+   });
+
+  </script>
+
+</dom-module>

@@ -67,7 +67,7 @@
               </tr></tbody><thead>
                 <tr><th scope="col">Route</th><th scope="col">Departs</th>
               </tr></thead>
-            
+
             <template is="dom-if" if="[[online]]">
               <template is="dom-repeat" items="[[departureTimes]]" as="trip">
                 <tr><td>[[trip.Description]]</td><td>[[trip.DepartureText]]</td></tr>
@@ -246,7 +246,7 @@
           return s.direction == direction && s.title == station;
         })[0].id;
 
-        var url = new URL("http://svc.metrotransit.org/NexTrip/" + stationID + "?format=json");
+        var url = new URL("https://svc.metrotransit.org/NexTrip/" + stationID + "?format=json");
 
         fetch(url).then(resp => {
           resp.json().then(trips => {

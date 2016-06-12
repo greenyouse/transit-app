@@ -1,0 +1,1 @@
+define(["Modernizr"],function(i){i.addTest("applicationcache","applicationCache"in window)});

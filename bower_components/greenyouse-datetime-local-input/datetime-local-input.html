@@ -1,0 +1,36 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../paper-input/paper-input-behavior.html">
+<link rel="import" href="../iron-input/iron-input.html">
+<link rel="import" href="../paper-input/paper-input-container.html">
+<link rel="import" href="../paper-input/paper-input-error.html">
+<link rel="import" href="datetime-local-polyfill.html">
+
+
+
+
+</head><body><dom-module id="datetime-local-input">
+    <style>*[hidden]{display:none;}</style>
+  <template>
+
+      <paper-input-container id="container" no-label-float="[[noLabelFloat]]" invalid="[[invalid]]" always-float-label="">
+
+        <label hidden$="[[!label]]">[[label]]</label>
+
+        
+        <input is="iron-input" class="paper-input-input" type="datetime-local" id="input" hidden$="[[_polyfill]]" required$="[[required]]" disabled$="[[disabled]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" bind-value="{{value}}" name$="[[name]]" autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" inavlid="{{invalid}}" readonly$="[[readonly]]">
+
+        
+        <datetime-local-polyfill class="paper-input-input" id="input" hidden$="[[!_polyfill]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" datetime="{{value}}" invalid="{{invalid}}" required="[[required]]">
+        </datetime-local-polyfill>
+
+        <template is="dom-if" if="[[errorMessage]]">
+          <paper-input-error id="error">[[errorMessage]]</paper-input-error>
+        </template>
+
+  </paper-input-container></template>
+</dom-module>
+<script>!function(){"use strict";Polymer({is:"datetime-local-input",behaviors:[Polymer.IronFormElementBehavior,Polymer.PaperInputBehavior],properties:{errorMessage:{type:String,value:"Please provide a full date"},label:{type:String,value:"Date"},value:{type:String,notify:!0,value:function(){return moment().format("YYYY-MM-DDTHH:mm")},observer:"validate"},_polyfill:{type:Boolean,value:function(){return this._setPolyfill()}}},get _focusableElement(){return this.$$("#input")},validate:function(){var e=this.value,t=!0;if(this.required||""!=e){var i=/\d{4}-\d{2}-\d{2}T\d{2}\:\d{2}/;i.test(e)||(t=!1)}else;return t==this.invalid&&(this.invalid=!t,this.$.container.updateAddons({inputElement:this.$$("#input"),value:this.value,invalid:!t})),t},_setPolyfill:function(){return!Modernizr.inputtypes["datetime-local"]},ready:function(){this.value&&this.validate(this.value),this._setPolyfill()&&this.setAttribute("tabindex",1)}})}();</script>
+<script src="../moment/moment.js"></script>
+<script src="modernizr.js"></script>
+</body></html>

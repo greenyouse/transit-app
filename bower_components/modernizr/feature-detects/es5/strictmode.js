@@ -1,0 +1,1 @@
+define(["Modernizr"],function(t){t.addTest("strictmode",function(){"use strict";return!this}())});

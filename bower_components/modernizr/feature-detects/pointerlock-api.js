@@ -1,0 +1,1 @@
+define(["Modernizr","prefixed"],function(e,i){e.addTest("pointerlock",!!i("exitPointerLock",document))});

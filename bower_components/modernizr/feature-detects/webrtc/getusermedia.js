@@ -1,0 +1,1 @@
+define(["Modernizr","prefixed"],function(e,d){e.addTest("getusermedia",!!d("getUserMedia",navigator))});

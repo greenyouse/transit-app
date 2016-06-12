@@ -1,0 +1,1 @@
+define(["Modernizr"],function(e){e.addTest("cors","XMLHttpRequest"in window&&"withCredentials"in new XMLHttpRequest)});

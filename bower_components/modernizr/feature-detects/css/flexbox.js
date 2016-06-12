@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(e,s){e.addTest("flexbox",s("flexBasis","1px",!0))});

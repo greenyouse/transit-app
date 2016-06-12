@@ -1,0 +1,1 @@
+define(["Modernizr","prefixed"],function(e,n){e.addTest("performance",!!n("performance",window))});

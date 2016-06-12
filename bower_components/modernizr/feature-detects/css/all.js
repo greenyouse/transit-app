@@ -1,0 +1,1 @@
+define(["Modernizr","docElement"],function(e,l){e.addTest("cssall","all"in l.style)});

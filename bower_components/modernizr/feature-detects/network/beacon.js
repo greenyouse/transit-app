@@ -1,0 +1,1 @@
+define(["Modernizr"],function(n){n.addTest("beacon","sendBeacon"in navigator)});

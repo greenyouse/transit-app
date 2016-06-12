@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(o,d){o.addTest("boxsizing",d("boxSizing","border-box",!0)&&(void 0===document.documentMode||document.documentMode>7))});

@@ -1,0 +1,1 @@
+define(["Modernizr","createElement"],function(e,o){e.addTest("videoloop","loop"in o("video"))});

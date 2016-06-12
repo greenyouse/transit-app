@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(e,n){e.addTest("flexboxtweener",n("flexAlign","end",!0))});

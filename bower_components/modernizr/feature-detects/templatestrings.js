@@ -1,0 +1,1 @@
+define(["Modernizr"],function(Modernizr){Modernizr.addTest("templatestrings",function(){var supports;try{eval("``"),supports=!0}catch(e){}return!!supports})});

@@ -1,0 +1,1 @@
+define(["Modernizr"],function(t){t.addTest("es5date",function(){var t="2013-04-12T06:06:37.307Z",e=!1;try{e=!!Date.parse(t)}catch(o){}return!!(Date.now&&Date.prototype&&Date.prototype.toISOString&&Date.prototype.toJSON&&e)})});

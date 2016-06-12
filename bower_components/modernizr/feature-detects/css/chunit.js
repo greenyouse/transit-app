@@ -1,0 +1,1 @@
+define(["Modernizr","modElem"],function(e,n){e.addTest("csschunit",function(){var e,t=n.elem.style;try{t.fontSize="3ch",e=-1!==t.fontSize.indexOf("ch")}catch(c){e=!1}return e})});

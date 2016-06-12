@@ -1,0 +1,1 @@
+define(["Modernizr"],function(e){e.addTest("filereader",!!(window.File&&window.FileList&&window.FileReader))});

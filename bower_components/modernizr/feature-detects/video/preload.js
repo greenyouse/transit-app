@@ -1,0 +1,1 @@
+define(["Modernizr","createElement"],function(e,d){e.addTest("videopreload","preload"in d("video"))});

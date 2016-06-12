@@ -1,0 +1,1 @@
+define(["Modernizr"],function(i){i.addTest("webaudio",function(){var n="webkitAudioContext"in window,e="AudioContext"in window;return i._config.usePrefixes?n||e:e})});

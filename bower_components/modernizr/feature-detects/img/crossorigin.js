@@ -1,0 +1,1 @@
+define(["Modernizr","createElement"],function(i,e){i.addTest("imgcrossorigin","crossOrigin"in e("img"))});

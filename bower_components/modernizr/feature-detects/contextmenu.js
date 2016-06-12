@@ -1,0 +1,1 @@
+define(["Modernizr","docElement"],function(e,n){e.addTest("contextmenu","contextMenu"in n&&"HTMLMenuItemElement"in window)});

@@ -1,0 +1,1 @@
+define(["Modernizr","prefixed"],function(e,r){e.addTest("lowbattery",function(){var e=.2,n=r("battery",navigator);return!!(n&&!n.charging&&n.level<=e)})});

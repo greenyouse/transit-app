@@ -1,0 +1,1 @@
+define(["Modernizr","testStyles"],function(e,n){e.addTest("hairline",function(){return n("#modernizr {border:.5px solid transparent}",function(e){return 1===e.offsetHeight})})});

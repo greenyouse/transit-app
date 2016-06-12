@@ -1,0 +1,1 @@
+define(["Modernizr"],function(e){e.addTest("es6object",!!(Object.assign&&Object.is&&Object.setPrototypeOf))});

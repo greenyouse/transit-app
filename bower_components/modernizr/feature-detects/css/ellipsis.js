@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(e,i){e.addTest("ellipsis",i("textOverflow","ellipsis"))});

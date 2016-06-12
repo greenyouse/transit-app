@@ -1,0 +1,1 @@
+define(["Modernizr"],function(n){n.addTest("es5function",function(){return!(!Function.prototype||!Function.prototype.bind)})});

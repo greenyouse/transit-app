@@ -1,0 +1,1 @@
+define(["Modernizr","testXhrType"],function(e,t){e.addTest("xhrresponsetypetext",t("text"))});

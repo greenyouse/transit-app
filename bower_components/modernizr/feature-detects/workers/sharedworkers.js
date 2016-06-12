@@ -1,0 +1,1 @@
+define(["Modernizr"],function(e){e.addTest("sharedworkers","SharedWorker"in window)});

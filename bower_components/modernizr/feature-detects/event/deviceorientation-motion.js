@@ -1,0 +1,1 @@
+define(["Modernizr"],function(e){e.addTest("devicemotion","DeviceMotionEvent"in window),e.addTest("deviceorientation","DeviceOrientationEvent"in window)});

@@ -1,0 +1,1 @@
+define(["Modernizr"],function(r){r.addTest("customprotocolhandler",function(){if(!navigator.registerProtocolHandler)return!1;try{navigator.registerProtocolHandler("thisShouldFail")}catch(r){return r instanceof TypeError}return!1})});

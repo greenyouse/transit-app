@@ -1,0 +1,1 @@
+define(["Modernizr","domPrefixes","hasEvent"],function(n,e,t){n.addTest("pointerevents",function(){var o=!1,r=e.length;for(o=n.hasEvent("pointerdown");r--&&!o;)t(e[r]+"pointerdown")&&(o=!0);return o})});

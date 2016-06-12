@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(e,a){e.addTest("bgrepeatround",a("backgroundRepeat","round")),e.addTest("bgrepeatspace",a("backgroundRepeat","space"))});

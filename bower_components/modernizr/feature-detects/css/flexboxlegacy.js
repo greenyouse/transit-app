@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(e,o){e.addTest("flexboxlegacy",o("boxDirection","reverse",!0))});

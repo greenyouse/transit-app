@@ -1,0 +1,1 @@
+define(["Modernizr"],function(e){e.addTest("speechsynthesis","SpeechSynthesisUtterance"in window)});

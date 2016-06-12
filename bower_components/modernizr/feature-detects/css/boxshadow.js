@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(o,d){o.addTest("boxshadow",d("boxShadow","1px 1px",!0))});

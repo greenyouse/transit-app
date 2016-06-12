@@ -1,0 +1,1 @@
+define(["Modernizr","testXhrType"],function(e,r){e.addTest("xhrresponsetypearraybuffer",r("arraybuffer"))});

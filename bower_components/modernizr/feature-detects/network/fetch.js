@@ -1,0 +1,1 @@
+define(["Modernizr"],function(e){e.addTest("fetch","fetch"in window)});

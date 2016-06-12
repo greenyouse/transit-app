@@ -1,0 +1,1 @@
+define(["Modernizr"],function(n){n.addTest("promises",function(){return"Promise"in window&&"resolve"in window.Promise&&"reject"in window.Promise&&"all"in window.Promise&&"race"in window.Promise&&function(){var n;return new window.Promise(function(i){n=i}),"function"==typeof n}()})});

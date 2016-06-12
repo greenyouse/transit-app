@@ -1,0 +1,1 @@
+define(["Modernizr"],function(e){e.addTest("es6collections",!!(window.Map&&window.Set&&window.WeakMap&&window.WeakSet))});

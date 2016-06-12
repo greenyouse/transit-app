@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(n,o){n.addTest("bgpositionxy",function(){return o("backgroundPositionX","3px",!0)&&o("backgroundPositionY","5px",!0)})});

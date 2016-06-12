@@ -1,0 +1,1 @@
+define(["Modernizr"],function(n){n.addTest("generators",function(){try{new Function("function* test() {}")()}catch(n){return!1}return!0})});

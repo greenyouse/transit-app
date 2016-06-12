@@ -1,0 +1,1 @@
+define(["Modernizr","createElement"],function(e,n){e.addTest("capture","capture"in n("input"))});

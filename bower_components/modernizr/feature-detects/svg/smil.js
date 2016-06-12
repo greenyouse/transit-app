@@ -1,0 +1,1 @@
+define(["Modernizr","toStringFn"],function(e,t){e.addTest("smil",function(){return!!document.createElementNS&&/SVGAnimate/.test(t.call(document.createElementNS("http://www.w3.org/2000/svg","animate")))})});

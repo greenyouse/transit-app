@@ -1,0 +1,1 @@
+define(["Modernizr","prefixed"],function(e,d){var r=d("crypto",window);e.addTest("crypto",!!d("subtle",r))});

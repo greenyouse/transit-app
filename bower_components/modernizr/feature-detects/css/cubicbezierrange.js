@@ -1,0 +1,1 @@
+define(["Modernizr","createElement","prefixes"],function(e,n,i){e.addTest("cubicbezierrange",function(){var e=n("a");return e.style.cssText=i.join("transition-timing-function:cubic-bezier(1,0,0,1.1); "),!!e.style.length})});

@@ -1,0 +1,1 @@
+define(["Modernizr"],function(o){o.addTest("atobbtoa","atob"in window&&"btoa"in window,{aliases:["atob-btoa"]})});

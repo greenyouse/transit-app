@@ -1,0 +1,1 @@
+define(["Modernizr","createElement"],function(e,n){e.addTest("scriptasync","async"in n("script"))});

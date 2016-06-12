@@ -1,0 +1,1 @@
+define(["Modernizr","prefixed"],function(e,i){var n=i("URL",window,!1);n=n&&window[n],e.addTest("bloburls",n&&"revokeObjectURL"in n&&"createObjectURL"in n)});

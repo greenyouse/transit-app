@@ -1,0 +1,1 @@
+define(["Modernizr","prefixed"],function(e,r){e.addTest("quotamanagement",function(){var e=r("temporaryStorage",navigator),t=r("persistentStorage",navigator);return!(!e||!t)})});

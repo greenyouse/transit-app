@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(n,s){n.addTest("scrollsnappoints",s("scrollSnapType"))});

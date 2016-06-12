@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(n,a){n.addTest("cssanimations",a("animationName","a",!0))});

@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(e,r){e.addTest("borderimage",r("borderImage","url() 1",!0))});

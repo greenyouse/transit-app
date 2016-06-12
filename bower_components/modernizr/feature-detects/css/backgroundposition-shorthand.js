@@ -1,0 +1,1 @@
+define(["Modernizr","createElement"],function(t,n){t.addTest("bgpositionshorthand",function(){var t=n("a"),o=t.style,e="right 10px bottom 10px";return o.cssText="background-position: "+e+";",o.backgroundPosition===e})});

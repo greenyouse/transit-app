@@ -1,0 +1,1 @@
+define(["Modernizr","createElement"],function(e,n){e.addTest("unknownelements",function(){var e=n("a");return e.innerHTML="<xyz></xyz>",1===e.childNodes.length})});

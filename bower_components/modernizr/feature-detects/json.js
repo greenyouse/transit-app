@@ -1,0 +1,1 @@
+define(["Modernizr"],function(n){n.addTest("json","JSON"in window&&"parse"in JSON&&"stringify"in JSON)});

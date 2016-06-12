@@ -1,0 +1,1 @@
+define(["Modernizr","testXhrType"],function(e,n){e.addTest("xhrresponsetypeblob",n("blob"))});

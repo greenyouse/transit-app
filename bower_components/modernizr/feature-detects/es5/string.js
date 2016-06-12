@@ -1,0 +1,1 @@
+define(["Modernizr"],function(t){t.addTest("es5string",function(){return!(!String.prototype||!String.prototype.trim)})});

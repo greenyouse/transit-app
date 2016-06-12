@@ -1,0 +1,1 @@
+define(["Modernizr","prefixed"],function(e,n){e.addTest("fullscreen",!(!n("exitFullscreen",document,!1)&&!n("cancelFullScreen",document,!1)))});

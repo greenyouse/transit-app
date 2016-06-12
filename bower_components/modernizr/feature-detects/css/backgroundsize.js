@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(e,d){e.addTest("backgroundsize",d("backgroundSize","100%",!0))});

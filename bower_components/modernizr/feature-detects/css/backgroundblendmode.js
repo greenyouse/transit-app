@@ -1,0 +1,1 @@
+define(["Modernizr","prefixed"],function(d,e){d.addTest("backgroundblendmode",e("backgroundBlendMode","text"))});

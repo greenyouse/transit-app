@@ -1,0 +1,1 @@
+define(["Modernizr","createElement"],function(e,d){e.addTest("stylescoped","scoped"in d("style"))});

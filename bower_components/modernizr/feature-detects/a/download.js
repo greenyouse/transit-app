@@ -1,0 +1,1 @@
+define(["Modernizr","createElement"],function(e,n){e.addTest("adownload",!window.externalHost&&"download"in n("a"))});

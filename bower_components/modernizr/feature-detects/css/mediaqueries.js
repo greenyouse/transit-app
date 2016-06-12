@@ -1,0 +1,1 @@
+define(["Modernizr","mq"],function(e,d){e.addTest("mediaqueries",d("only all"))});

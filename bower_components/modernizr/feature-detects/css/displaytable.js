@@ -1,0 +1,1 @@
+define(["Modernizr","testStyles"],function(e,d){d("#modernizr{display: table; direction: ltr}#modernizr div{display: table-cell; padding: 10px}",function(d){var i,t=d.childNodes;i=t[0].offsetLeft<t[1].offsetLeft,e.addTest("displaytable",i,{aliases:["display-table"]})},2)});

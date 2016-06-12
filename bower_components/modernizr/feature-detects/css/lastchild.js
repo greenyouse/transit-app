@@ -1,0 +1,1 @@
+define(["Modernizr","testStyles"],function(i,d){d("#modernizr div {width:100px} #modernizr :last-child{width:200px;display:block}",function(d){i.addTest("lastchild",d.lastChild.offsetWidth>d.firstChild.offsetWidth)},2)});

@@ -1,0 +1,1 @@
+define(["Modernizr"],function(e){e.addTest("eventsource","EventSource"in window)});

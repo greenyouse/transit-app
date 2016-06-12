@@ -1,0 +1,1 @@
+define(["Modernizr"],function(e){e.addTest("queryselector","querySelector"in document&&"querySelectorAll"in document)});

@@ -1,0 +1,1 @@
+define(["Modernizr","prefixed"],function(t,e){t.addTest("webintents",!!e("startActivity",navigator))});

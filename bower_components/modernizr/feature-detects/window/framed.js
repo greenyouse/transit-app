@@ -1,0 +1,1 @@
+define(["Modernizr"],function(o){o.addTest("framed",window.location!=top.location)});

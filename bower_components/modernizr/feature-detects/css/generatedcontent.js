@@ -1,0 +1,1 @@
+define(["Modernizr","testStyles"],function(e,t){t('#modernizr{font:0/0 a}#modernizr:after{content:":)";visibility:hidden;font:7px/1 a}',function(t){e.addTest("generatedcontent",t.offsetHeight>=7)})});

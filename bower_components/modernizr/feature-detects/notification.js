@@ -1,0 +1,1 @@
+define(["Modernizr"],function(i){i.addTest("notification",function(){if(!window.Notification||!window.Notification.requestPermission)return!1;if("granted"===window.Notification.permission)return!0;try{new window.Notification("")}catch(i){if("TypeError"===i.name)return!1}return!0})});

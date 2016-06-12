@@ -1,0 +1,1 @@
+define(["Modernizr","prefixed"],function(e,a){e.addTest("gamepads",!!a("getGamepads",navigator))});

@@ -1,0 +1,1 @@
+define(["Modernizr","testAllProps"],function(d,r){d.addTest("borderradius",r("borderRadius","0px",!0))});

@@ -67,7 +67,7 @@
               </tr></tbody><thead>
                 <tr><th scope="col">Route</th><th scope="col">Departs</th>
               </tr></thead>
-
+            
             <template is="dom-if" if="[[online]]">
               <template is="dom-repeat" items="[[departureTimes]]" as="trip">
                 <tr><td>[[trip.Description]]</td><td>[[trip.DepartureText]]</td></tr>

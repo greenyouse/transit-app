@@ -175,7 +175,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
        page: {
          type: String,
-         value: 'planner',
          reflectToAttribute: true,
          observer: '_pageChanged'
        },
@@ -204,6 +203,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      observers: [
        '_routePageChanged(routeData.page)'
      ],
+
+     // use the planner page as the homepage
+     ready: function() {
+       this.page = "planner";
+     },
 
      _routePageChanged: function(page) {
        this.page = page || 'planner';

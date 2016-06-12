@@ -744,7 +744,7 @@ for(n in this._instanceProps)e._addPropertyEffect(n,"function",this._createInsta
 
   </template>
 
-  <script>Polymer({is:"transit-app",properties:{page:{type:String,value:"planner",reflectToAttribute:!0,observer:"_pageChanged"},routeData:{type:Object},route:{type:Object},subroute:{type:Object},smallScreen:{type:Boolean},scheduleData:{type:Array}},observers:["_routePageChanged(routeData.page)"],_routePageChanged:function(e){this.page=e||"planner"},_pageChanged:function(e){this.importHref(this.resolveUrl("my-"+e+".html"),null,null,!0)},_toggleDrawer:function(){this.drawerOpened=!this.drawerOpened}});</script>
+  <script>Polymer({is:"transit-app",properties:{page:{type:String,reflectToAttribute:!0,observer:"_pageChanged"},routeData:{type:Object},route:{type:Object},subroute:{type:Object},smallScreen:{type:Boolean},scheduleData:{type:Array}},observers:["_routePageChanged(routeData.page)"],ready:function(){this.page="planner"},_routePageChanged:function(e){this.page=e||"planner"},_pageChanged:function(e){this.importHref(this.resolveUrl("my-"+e+".html"),null,null,!0)},_toggleDrawer:function(){this.drawerOpened=!this.drawerOpened}});</script>
 
 </dom-module>
 </body></html>

@@ -23,6 +23,11 @@
          }
      }
 
+     .flex {
+         -webkit-flex-basis: auto !important;
+         flex-basis: auto !important;
+     }
+
      .card {
          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
          padding: 16px;
@@ -99,9 +104,15 @@
          height: 300px;
          overflow: auto;
      }
+
+     @media screen and (max-width: 767px) {
+         .scrollableTable {
+             width: 80vw;
+         }
+     }
     </style>
 
-    <div class="card flex layout vertical center center-justified wrap">
+    <div class="card flex layout wrap vertical center center-justified wrap">
       <h1>Train Schedules</h1>
       <br>
       <paper-dropdown-menu label="Route">

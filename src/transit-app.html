@@ -156,7 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
 
     <iron-pages role="main" selected="{{page}}" attr-for-selected="name">
-      <my-planner name="planner"></my-planner>
+      <my-planner name="planner" schedule-data="{{scheduleData}}"></my-planner>
       <my-schedule name="schedule" schedule-data="{{scheduleData}}"></my-schedule>
       <my-next name="next" schedule-data="{{scheduleData}}"></my-next>
     </iron-pages>

@@ -1,3 +1,5 @@
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/google-map/google-map.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
@@ -10,7 +12,7 @@
 
   <template>
 
-    <style>
+    <style include="iron-flex iron-flex-alignment">
      :host {
          display: block;
          padding: 10px;
@@ -146,14 +148,19 @@
          }
      }
 
+     td {
+         color: black;
+         padding: 20px;
+     }
+
+     table tr:nth-child(even) {
+         border-top: 1px solid #757575;
+     }
+
     </style>
 
     <div class="card">
-      <div class="center" hidden$="[[online]]">
-        <h3 class="warning">App is offline!</h3>
-        <p class="warning__text">For trip directions by phone, call Metro Transit at 612-373-3333</p>
-      </div>
-      <div hidden$="[[!online]]">
+      <div>
         <section class="menu">
           <div class="menu__title">
             <h1>Trip Planner</h1>
@@ -192,22 +199,36 @@
               </div>
             </div>
           </div>
-          <template is="dom-if" if="[[directionsLoaded]]">
-            <h3>Trip Directions:</h3>
-            <div class="menu__row--map">
-              <google-map map="{{map}}"></google-map>
-              <map-directions map="{{map}}"
-                              id="directionsPanel"
-                              start-address="{{startCoords}}"
-                              end-address="{{endCoords}}"
-                              travel-mode="TRANSIT"
-                              arrival-time="[[arrivalTime]]"
-                              departure-time="[[departureTime]]"
-                              use-arrival="[[_useArrival]]"
-                              directions-panel>
-              </map-directions>
-            </div>
-          </template>
+
+          <div hidden$="[[online]]">
+            <template is="dom-if" if="[[directionsLoaded]]">
+              <h5 class="warning">App is offline. Actual departure times may vary.</h5>
+              <table class="flex layout wrap vertical center center-justified">
+                <template is="dom-repeat" items="[[offlineDirections]]" as="step">
+                  <tr><td>[[step]]</td></tr>
+                </template>
+              </table>
+            </template>
+          </div>
+
+          <div hidden$="[[!online]]">
+            <template is="dom-if" if="[[directionsLoaded]]">
+              <h3>Trip Directions:</h3>
+              <div class="menu__row--map">
+                <google-map map="{{map}}"></google-map>
+                <map-directions map="{{map}}"
+                                id="directionsPanel"
+                                start-address="{{startCoords}}"
+                                end-address="{{endCoords}}"
+                                travel-mode="TRANSIT"
+                                arrival-time="[[arrivalTime]]"
+                                departure-time="[[departureTime]]"
+                                use-arrival="[[_useArrival]]"
+                                directions-panel>
+                </map-directions>
+              </div>
+            </template>
+          </div>
         </section>
       </div>
     </div>
@@ -311,13 +332,18 @@
          type: Boolean,
          value: false,
          notify: true
-       }
+       },
 
+       offlineDirections: {
+         type: Array,
+         notify: true
+       }
      },
 
      observers: [
        '_setTimeType(_timeType)',
-       '_setCoords(startAddress, endAddress)'
+       '_setCoords(startAddress, endAddress)',
+       '_offlineDirections(startAddress, endAddress, departureTime)'
      ],
 
      ready: function() {
@@ -344,6 +370,9 @@
 
      /**
       * Get full record for a given station
+      *
+      * @param {String} stationName
+      * @return {Object} The station record
       */
      _stationLookup: function(stationName) {
        for (var i = 0; i < app.stations.length; i++) {
@@ -356,6 +385,12 @@
        }
      },
 
+     /**
+      * Lookup latitude/longitude coordinates for a given station.
+      *
+      * @param {String} stationName
+      * @return {String}
+      */
      _getCoords: function(stationName) {
        var station = this._stationLookup(stationName);
 
@@ -365,12 +400,91 @@
        return lat + ", " + long;
      },
 
-     _setCoords: function(start, end) {
-       if (start && end) {
+     /**
+      * Set the latitude/longitude coordinates for the starting and ending stations.
+      *
+      * @param {String} originTitle Starting station's title
+      * @param {String} destinationTitle Ending station's title
+      */
+     _setCoords: function(originTitle, destinationTitle) {
+       if (originTitle && destinationTitle) {
          this.startCoords = this._getCoords(this.startAddress);
          this.endCoords = this._getCoords(this.endAddress);
 
          this.directionsLoaded = true;
+       }
+     },
+
+     /**
+      * Return the weekday period: Saturday, Sunday, or Weekday
+      */
+     weekPeriod: function() {
+       var now = moment(this.departureTime, "YYYY-MM-DDTHH:mm");
+       var day = moment.localeData().weekdays(now);
+
+       if (day == "Saturday" || day == "Sunday")
+         return day;
+
+       return "Weekday";
+     },
+
+     /**
+      * Finds the next departure time for a given train
+      *
+      * @param {String} route The train route: blue, green, or northstar
+      * @param {String} direction N,S,E, or W
+      * @param {Number} station The stationID
+      * @return {String} The time for the next departure
+      */
+     nextDeparture: function(route, direction, stationID) {
+       var data = this.scheduleData,
+           day = this.weekPeriod(),
+           // NOTE: can't really use arrival times since there's no data for trip durations
+           date = new Date(moment(this.departureTime, "YYYY-MM-DDTHH:mm"));
+
+       var times = data[stationID][day]
+
+       var nextTrip = times.filter(t => {
+         var time = moment(t, "HH:mm").toDate();
+         return time > date;
+       })[0];
+
+       return moment(nextTrip, "HH:mm").format("hh:mm:a");
+     },
+
+     /**
+      * See if a station is one of the shared stations, return true if so
+      *
+      * @param {Object} station
+      * @return {Boolean} Whether the station is shared
+      */
+     _sharedStationCheck: function(station) {
+       var sharedStations = new Set([
+         "Target Field Station Platform 1",
+         "Target Field Station Platform 2",
+         "Warehouse Hennepin Ave Station",
+         "Nicollet Mall Station",
+         "Government Plaza Station",
+         "U.S. Bank Stadium Station",
+       ]);
+
+       return sharedStations.has(station.title);
+     },
+
+     /**
+      * Finds the trip direction for two stations on the same line
+      *
+      * @param {Object} origin The stating station
+      * @param {Object} destination The end station
+      * @return {String} The trip direction: N,S,E, or W
+      */
+     _sameRouteDirection: function(origin, destination) {
+       if (origin.route == "green") {
+         latDiff = origin.latitude - destination.latitude;
+         return latDiff > 0? "W" : "E";
+       } else {
+         longDiff = origin.longitude - destination.longitude;
+         return longDiff > 0? "N" : "S";
        }
      },
 
@@ -381,33 +495,64 @@
       * @param {Object} destination
       * @return String The direction: N,S,E,W
       */
-     /* _getDirection: function(origin, destination) {
-        if (origin.route == destination.route) {
-        var stops = app.routes[origin.route];
+     _getDirection: function(origin, destination) {
+       console.log(origin, destination);
+       if (origin.route == destination.route || this._sharedStationCheck(destination)) {
+         return this._sameRouteDirection(origin, destination);
+       } else {
+         switch (origin.route) {
+           case "green":
+             return "W";
+             break;
+           case "blue":
+             return "N";
+             break;
+           case "northstar":
+             return "S";
+             break;
+         }
+       }
+     },
 
-        if (origin.route == "blue" || "northstar") {
-        return stops.indexOf(origin.title) < stops.indexOf(destination.title) ? "N" : "S"
-        } else {
-        return stops.indexOf(origin.title) < stops.indexOf(destination.title) ? "W" : "E"
-        }
-        } else if ()
-        }, */
+     /**
+      * Generates trip directions when offline.
+      *
+      * @param {String} originTitle The name of the starting station
+      * @param {String} destinationTitle The name of the ending station
+      */
+     _offlineDirections: function(startAddress, endAddress) {
+       if (this.online || !startAddress || !endAddress)
+         return ;
+       var origin = this._stationLookup(startAddress),
+           destination = this._stationLookup(endAddress);
 
-     /* _offlineDirections: function(origin, destination) {
-        var startRoute = origin.route,
-        endRoute = origin.route;
+       // Outline for finding trip direction:
+       // if both on same route or using abmiguous destination, calculate with lat/long coords
+       // else use the direction needed to connect to other routes
+       var direction = this._getDirection(origin, destination);
+       var departureTime = this.nextDeparture(origin.route, direction, origin.id);
 
-        // find route directions based on lat/long comparison when same route else route comparison
-        // if they're the same, get on next train for route
-        // green <-> blue, next train for route, stop at Gov and switch trains
-        // green/blue <-> both, next train for route
-        // green/blue/both <-> northstar, next train for route, transfer at target field
+       // same route || green/blue <-> ambiguous, next train for route
+       if (origin.route == destination.route ||
+           this._sharedStationCheck(origin) ||
+           this._sharedStationCheck(destination)) {
+             this.offlineDirections = ["Take " + origin.route + " line towards " + destination.title + ". The next train departs at " + departureTime];
+       }
 
-        var start = this._stationLookup(origin),
-        end = this._stationLookup(destination);
-        } */
+       // green <-> blue, next train for route, stop at Gov and switch trains
+       else if ((origin.route == "blue" || origin.route == "green") &&
+                (destination.route == "blue" || destination.route == "green")) {
+                  this.offlineDirections = ["Take " + origin.route + " line towards " + destination.title + ". The next train departs at " + departureTime, "Transfer to the " + destination.route + " line at U.S. Bank Stadium Station."];
+       }
 
-   });
+       // green/blue/both <-> northstar, next train for route, transfer at target field
+       else {
+         this.offlineDirections = ["Take " + origin.route + " line towards " + destination.title + ". The next train departs at " + departureTime, "Transfer to the " + destination.route + " line at Target Field Station."];
+       };
+
+       this.directionsLoaded = true;
+     }
+     });
   </script>
   <script type="text/javascript" src="../bower_components/moment/moment.js"></script>
 

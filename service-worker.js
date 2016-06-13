@@ -29,7 +29,7 @@
 
 
 /* eslint-disable quotes, comma-spacing */
-var PrecacheConfig = [["/bower_components/webcomponentsjs/webcomponents-lite.min.js","a1882f82ebfc212658591b4e817d8e03"],["/index.html","6eebdf58e388dcc7a1d537274b9e51e1"],["/manifest.json","273d284cdbe7fdf257681da0fa712cd6"],["/src/my-next.html","a5aa710a62fd241fcc64a58529fa6119"],["/src/my-planner.html","07816686f08fb85ddb9cd2f177fe4ec9"],["/src/my-schedule.html","5db3eea7c31199a00f242f98b2552e8b"],["/src/transit-app.html","ef9bc318a4213fcebaedf777cb4bb5c4"]];
+var PrecacheConfig = [["/bower_components/webcomponentsjs/webcomponents-lite.min.js","a1882f82ebfc212658591b4e817d8e03"],["/index.html","6eebdf58e388dcc7a1d537274b9e51e1"],["/manifest.json","273d284cdbe7fdf257681da0fa712cd6"],["/src/my-next.html","a5aa710a62fd241fcc64a58529fa6119"],["/src/my-planner.html","5da7665a7b4d05fafc5ee9c47ed0ef9d"],["/src/my-schedule.html","4d2a1be32558eff04998cdfdaac38f57"],["/src/transit-app.html","5fc1567f9b391c7fdbc3d6ffaf9f6af6"]];
 /* eslint-enable quotes, comma-spacing */
 var CacheNamePrefix = 'sw-precache-v1--' + (self.registration ? self.registration.scope : '') + '-';
 

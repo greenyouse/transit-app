@@ -359,6 +359,48 @@ for(n in this._instanceProps)e._addPropertyEffect(n,"function",this._createInsta
 <g id="schedule"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></g>
 </defs></svg>
 </iron-iconset-svg>
+<dom-module id="iron-flex" assetpath="../bower_components/iron-flex-layout/">
+  <template>
+    <style>.layout.horizontal,
+      .layout.vertical{display:-ms-flexbox;display:-webkit-flex;display:flex;}.layout.inline{display:-ms-inline-flexbox;display:-webkit-inline-flex;display:inline-flex;}.layout.horizontal{-ms-flex-direction:row;-webkit-flex-direction:row;flex-direction:row;}.layout.vertical{-ms-flex-direction:column;-webkit-flex-direction:column;flex-direction:column;}.layout.wrap{-ms-flex-wrap:wrap;-webkit-flex-wrap:wrap;flex-wrap:wrap;}.layout.center,
+      .layout.center-center{-ms-flex-align:center;-webkit-align-items:center;align-items:center;}.layout.center-justified,
+      .layout.center-center{-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;}.flex{-ms-flex:1 1 0.000000001px;-webkit-flex:1;flex:1;-webkit-flex-basis:0.000000001px;flex-basis:0.000000001px;}.flex-auto{-ms-flex:1 1 auto;-webkit-flex:1 1 auto;flex:1 1 auto;}.flex-none{-ms-flex:none;-webkit-flex:none;flex:none;}</style>
+  </template>
+</dom-module>
+
+
+<dom-module id="iron-flex-reverse" assetpath="../bower_components/iron-flex-layout/">
+  <template>
+    <style>.layout.horizontal-reverse,
+      .layout.vertical-reverse{display:-ms-flexbox;display:-webkit-flex;display:flex;}.layout.horizontal-reverse{-ms-flex-direction:row-reverse;-webkit-flex-direction:row-reverse;flex-direction:row-reverse;}.layout.vertical-reverse{-ms-flex-direction:column-reverse;-webkit-flex-direction:column-reverse;flex-direction:column-reverse;}.layout.wrap-reverse{-ms-flex-wrap:wrap-reverse;-webkit-flex-wrap:wrap-reverse;flex-wrap:wrap-reverse;}</style>
+  </template>
+</dom-module>
+
+
+<dom-module id="iron-flex-alignment" assetpath="../bower_components/iron-flex-layout/">
+  <template>
+    <style>.layout.start{-ms-flex-align:start;-webkit-align-items:flex-start;align-items:flex-start;}.layout.center,
+      .layout.center-center{-ms-flex-align:center;-webkit-align-items:center;align-items:center;}.layout.end{-ms-flex-align:end;-webkit-align-items:flex-end;align-items:flex-end;}.layout.baseline{-ms-flex-align:baseline;-webkit-align-items:baseline;align-items:baseline;}.layout.start-justified{-ms-flex-pack:start;-webkit-justify-content:flex-start;justify-content:flex-start;}.layout.center-justified,
+      .layout.center-center{-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;}.layout.end-justified{-ms-flex-pack:end;-webkit-justify-content:flex-end;justify-content:flex-end;}.layout.around-justified{-ms-flex-pack:distribute;-webkit-justify-content:space-around;justify-content:space-around;}.layout.justified{-ms-flex-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;}.self-start{-ms-align-self:flex-start;-webkit-align-self:flex-start;align-self:flex-start;}.self-center{-ms-align-self:center;-webkit-align-self:center;align-self:center;}.self-end{-ms-align-self:flex-end;-webkit-align-self:flex-end;align-self:flex-end;}.self-stretch{-ms-align-self:stretch;-webkit-align-self:stretch;align-self:stretch;}.self-baseline{-ms-align-self:baseline;-webkit-align-self:baseline;align-self:baseline;}.layout.start-aligned{-ms-flex-line-pack:start;-ms-align-content:flex-start;-webkit-align-content:flex-start;align-content:flex-start;}.layout.end-aligned{-ms-flex-line-pack:end;-ms-align-content:flex-end;-webkit-align-content:flex-end;align-content:flex-end;}.layout.center-aligned{-ms-flex-line-pack:center;-ms-align-content:center;-webkit-align-content:center;align-content:center;}.layout.between-aligned{-ms-flex-line-pack:justify;-ms-align-content:space-between;-webkit-align-content:space-between;align-content:space-between;}.layout.around-aligned{-ms-flex-line-pack:distribute;-ms-align-content:space-around;-webkit-align-content:space-around;align-content:space-around;}</style>
+  </template>
+</dom-module>
+
+<dom-module id="iron-flex-factors" assetpath="../bower_components/iron-flex-layout/">
+  <template>
+    <style>.flex,
+      .flex-1{-ms-flex:1 1 0.000000001px;-webkit-flex:1;flex:1;-webkit-flex-basis:0.000000001px;flex-basis:0.000000001px;}.flex-2{-ms-flex:2;-webkit-flex:2;flex:2;}.flex-3{-ms-flex:3;-webkit-flex:3;flex:3;}.flex-4{-ms-flex:4;-webkit-flex:4;flex:4;}.flex-5{-ms-flex:5;-webkit-flex:5;flex:5;}.flex-6{-ms-flex:6;-webkit-flex:6;flex:6;}.flex-7{-ms-flex:7;-webkit-flex:7;flex:7;}.flex-8{-ms-flex:8;-webkit-flex:8;flex:8;}.flex-9{-ms-flex:9;-webkit-flex:9;flex:9;}.flex-10{-ms-flex:10;-webkit-flex:10;flex:10;}.flex-11{-ms-flex:11;-webkit-flex:11;flex:11;}.flex-12{-ms-flex:12;-webkit-flex:12;flex:12;}</style>
+  </template>
+</dom-module>
+
+
+<dom-module id="iron-positioning" assetpath="../bower_components/iron-flex-layout/">
+  <template>
+    <style>.block{display:block;}[hidden]{display:none !important;}.invisible{visibility:hidden !important;}.relative{position:relative;}.fit{position:absolute;top:0;right:0;bottom:0;left:0;}body.fullbleed{margin:0;height:100vh;}.scroll{-webkit-overflow-scrolling:touch;overflow:auto;}.fixed-bottom,
+      .fixed-left,
+      .fixed-right,
+      .fixed-top{position:fixed;}.fixed-top{top:0;left:0;right:0;}.fixed-right{top:0;right:0;bottom:0;}.fixed-bottom{right:0;bottom:0;left:0;}.fixed-left{top:0;bottom:0;left:0;}</style>
+  </template>
+</dom-module>
 <script>Polymer.IronFormElementBehavior={properties:{name:{type:String},value:{notify:!0,type:String},required:{type:Boolean,value:!1},_parentForm:{type:Object}},attached:function(){this.fire("iron-form-element-register")},detached:function(){this._parentForm&&this._parentForm.fire("iron-form-element-unregister",{target:this})}};</script>
 <script>Polymer.PaperInputHelper={},Polymer.PaperInputHelper.NextLabelID=1,Polymer.PaperInputHelper.NextAddonID=1,Polymer.PaperInputBehaviorImpl={properties:{label:{type:String},value:{notify:!0,type:String},disabled:{type:Boolean,value:!1},invalid:{type:Boolean,value:!1,notify:!0},preventInvalidInput:{type:Boolean},allowedPattern:{type:String},type:{type:String},list:{type:String},pattern:{type:String},required:{type:Boolean,value:!1},errorMessage:{type:String},charCounter:{type:Boolean,value:!1},noLabelFloat:{type:Boolean,value:!1},alwaysFloatLabel:{type:Boolean,value:!1},autoValidate:{type:Boolean,value:!1},validator:{type:String},autocomplete:{type:String,value:"off"},autofocus:{type:Boolean},inputmode:{type:String},minlength:{type:Number},maxlength:{type:Number},min:{type:String},max:{type:String},step:{type:String},name:{type:String},placeholder:{type:String,value:""},readonly:{type:Boolean,value:!1},size:{type:Number},autocapitalize:{type:String,value:"none"},autocorrect:{type:String,value:"off"},autosave:{type:String},results:{type:Number},accept:{type:String},multiple:{type:Boolean},_ariaDescribedBy:{type:String,value:""},_ariaLabelledBy:{type:String,value:""}},listeners:{"addon-attached":"_onAddonAttached"},keyBindings:{"shift+tab:keydown":"_onShiftTabDown"},hostAttributes:{tabindex:0},get inputElement(){return this.$.input},get _focusableElement(){return this.inputElement},registered:function(){this._typesThatHaveText=["date","datetime","datetime-local","month","time","week","file"]},attached:function(){this._updateAriaLabelledBy(),this.inputElement&&-1!==this._typesThatHaveText.indexOf(this.inputElement.type)&&(this.alwaysFloatLabel=!0)},_appendStringWithSpace:function(e,t){return e=e?e+" "+t:t},_onAddonAttached:function(e){var t=e.path?e.path[0]:e.target;if(t.id)this._ariaDescribedBy=this._appendStringWithSpace(this._ariaDescribedBy,t.id);else{var a="paper-input-add-on-"+Polymer.PaperInputHelper.NextAddonID++;t.id=a,this._ariaDescribedBy=this._appendStringWithSpace(this._ariaDescribedBy,a)}},validate:function(){return this.inputElement.validate()},_focusBlurHandler:function(e){this._shiftTabPressed||(Polymer.IronControlState._focusBlurHandler.call(this,e),this.focused&&this._focusableElement.focus())},_onShiftTabDown:function(e){var t=this.getAttribute("tabindex");this._shiftTabPressed=!0,this.setAttribute("tabindex","-1"),this.async(function(){this.setAttribute("tabindex",t),this._shiftTabPressed=!1},1)},_handleAutoValidate:function(){this.autoValidate&&this.validate()},updateValueAndPreserveCaret:function(e){try{var t=this.inputElement.selectionStart;this.value=e,this.inputElement.selectionStart=t,this.inputElement.selectionEnd=t}catch(a){this.value=e}},_computeAlwaysFloatLabel:function(e,t){return t||e},_updateAriaLabelledBy:function(){var e=Polymer.dom(this.root).querySelector("label");if(!e)return void(this._ariaLabelledBy="");var t;e.id?t=e.id:(t="paper-input-label-"+Polymer.PaperInputHelper.NextLabelID++,e.id=t),this._ariaLabelledBy=t},_onChange:function(e){this.shadowRoot&&this.fire(e.type,{sourceEvent:e},{node:this,bubbles:e.bubbles,cancelable:e.cancelable})}},Polymer.PaperInputBehavior=[Polymer.IronControlState,Polymer.IronA11yKeysBehavior,Polymer.PaperInputBehaviorImpl];</script>
 <dom-module id="iron-a11y-announcer" assetpath="../bower_components/iron-a11y-announcer/">
@@ -735,7 +777,7 @@ for(n in this._instanceProps)e._addPropertyEffect(n,"function",this._createInsta
     </template>
 
     <iron-pages role="main" selected="{{page}}" attr-for-selected="name">
-      <my-planner name="planner"></my-planner>
+      <my-planner name="planner" schedule-data="{{scheduleData}}"></my-planner>
       <my-schedule name="schedule" schedule-data="{{scheduleData}}"></my-schedule>
       <my-next name="next" schedule-data="{{scheduleData}}"></my-next>
     </iron-pages>

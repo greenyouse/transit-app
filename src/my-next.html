@@ -294,6 +294,8 @@
       },
 
       fetchDepartures: function(route, direction, station) {
+        if (station == "")
+          return ;
         if (!this.online)
           this.offlineSchedule(route, direction, station);
 

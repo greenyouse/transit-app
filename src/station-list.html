@@ -85,7 +85,7 @@
       */
      _closestStation: function(stations) {
        // ignore this feature if it's not supported by the browser or location isn't used
-       if (!"geolocation" in navigator || this.useLocation != true) return;
+       if (!"geolocation" in navigator || this.useLocation != true || stations.length == 0) return;
 
        navigator.geolocation.getCurrentPosition(position => {
          var lat = position.coords.latitude,

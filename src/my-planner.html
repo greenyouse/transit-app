@@ -100,7 +100,7 @@ return e=L(e),this[e+"s"]()}function Kn(e){return function(){return this._data[e
 
     <style include="iron-flex iron-flex-alignment">:host{display:block;padding:10px;--paper-tab-content:{color:black;background-color:cadetblue;};--paper-tabs-selection-bar-color:white;--paper-tabs:{border-radius:5%;};}.card{box-shadow:0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);padding:16px;margin:24px;border-radius:5px;background-color:#fff;color:#757575;}h1{font-size:22px;margin:16px 0;color:#212121;}*[hidden]{display:none;}.center{text-align:center;}.warning{color:red;}.warning__text{color:black;}#directionsPanel select, #directionsPanel input{font-size:15px;}#directionsPanel select{width:100%;}#directionsPanel i{font-size:12px;}.menu, .menu__item, .menu__title{display:flex;flex-direction:column;justify-content:flex-start;}.menu__title{align-items:center;}.menu > *,
      .menu__item > *,
-     .menu__title > *{margin-bottom:10px;flex:1 1 auto;}.menu__row{display:flex;flex-flow:row wrap;justify-content:space-around;}.menu__row > *{flex:0 1 auto;}.menu__row--map{display:flex;flex-flow:row wrap;justify-content:center;}.menu__row--map > *{flex:1 1 auto;align-self:auto;margin-right:30px;margin-bottom:30px;}#directionsPanel{line-height:30px;color:black;}.selector{width:250px;}.selector--small{width:100px;}@media screen and (min-width: 1440px){section{margin-right:10%;margin-left:10%;}}@media screen and (max-width: 768px){google-map{height:50vw;}}@media screen and (min-width: 768px){google-map{height:50vw;min-width:20vw;}#directionsPanel{max-width:20vw;}}td{color:black;padding:20px;}table tr:nth-child(even){border-top:1px solid #757575;}</style>
+     .menu__title > *{margin-bottom:10px;flex:1 1 auto;}.menu__row{display:flex;flex-flow:row wrap;justify-content:space-around;}.menu__row > *{flex:0 1 auto;}.menu__row--map{display:flex;flex-flow:row wrap;justify-content:center;}.menu__row--map > *{flex:1 1 auto;align-self:auto;margin-right:30px;margin-bottom:30px;}#directionsPanel{line-height:30px;color:black;}.selector{width:250px;}.selector--small{width:100px;}.flex{-webkit-flex-basis:auto !important;flex-basis:auto !important;}@media screen and (min-width: 1440px){section{margin-right:10%;margin-left:10%;}}@media screen and (max-width: 768px){google-map{height:50vw;}}@media screen and (min-width: 768px){google-map{height:50vw;min-width:20vw;}#directionsPanel{max-width:20vw;}}td{color:black;padding:20px;}table tr:nth-child(even){border-top:1px solid #757575;}</style>
 
     <div class="card">
       <div>
@@ -132,12 +132,15 @@ return e=L(e),this[e+"s"]()}function Kn(e){return function(){return this._data[e
 
           <div hidden$="[[online]]">
             <template is="dom-if" if="[[directionsLoaded]]">
-              <h5 class="warning">App is offline. Actual departure times may vary.</h5>
-              <table class="flex layout wrap vertical center center-justified">
-                <template is="dom-repeat" items="[[offlineDirections]]" as="step">
-                  <tr><td>[[step]]</td></tr>
-                </template>
-              </table>
+              <div class="flex layout wrap vertical center center-justified">
+                <h5 class="warning">App is offline. Actual departure times may vary.</h5>
+                <h3>Trip Directions:</h3>
+                <table class="flex layout wrap vertical center center-justified">
+                  <template is="dom-repeat" items="[[offlineDirections]]" as="step">
+                    <tr><td>[[step]]</td></tr>
+                  </template>
+                </table>
+              </div>
             </template>
           </div>
 

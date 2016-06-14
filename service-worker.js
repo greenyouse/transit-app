@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Google Inc. All rights reserved.
+ * Copyright 2016 Google Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@
 
 
 /* eslint-disable quotes, comma-spacing */
-var PrecacheConfig = [["/bower_components/webcomponentsjs/webcomponents-lite.min.js","a1882f82ebfc212658591b4e817d8e03"],["/index.html","6eebdf58e388dcc7a1d537274b9e51e1"],["/manifest.json","273d284cdbe7fdf257681da0fa712cd6"],["/src/my-next.html","a5aa710a62fd241fcc64a58529fa6119"],["/src/my-planner.html","5da7665a7b4d05fafc5ee9c47ed0ef9d"],["/src/my-schedule.html","4d2a1be32558eff04998cdfdaac38f57"],["/src/transit-app.html","5fc1567f9b391c7fdbc3d6ffaf9f6af6"]];
+var PrecacheConfig = [["/bower_components/webcomponentsjs/webcomponents-lite.min.js","a1882f82ebfc212658591b4e817d8e03"],["/index.html","6eebdf58e388dcc7a1d537274b9e51e1"],["/manifest.json","273d284cdbe7fdf257681da0fa712cd6"],["/src/my-next.html","185c21614ec8ec03d36957600ba07d8b"],["/src/my-planner.html","6af67ded313977393ec331563e93c77e"],["/src/my-schedule.html","4d2a1be32558eff04998cdfdaac38f57"],["/src/transit-app.html","5fc1567f9b391c7fdbc3d6ffaf9f6af6"]];
 /* eslint-enable quotes, comma-spacing */
 var CacheNamePrefix = 'sw-precache-v1--' + (self.registration ? self.registration.scope : '') + '-';
 
@@ -46,12 +46,12 @@ var addDirectoryIndex = function (originalUrl, index) {
     return url.toString();
   };
 
-var getCacheBustedUrl = function (url, now) {
-    now = now || Date.now();
+var getCacheBustedUrl = function (url, param) {
+    param = param || Date.now();
 
     var urlWithCacheBusting = new URL(url);
     urlWithCacheBusting.search += (urlWithCacheBusting.search ? '&' : '') +
-      'sw-precache=' + now;
+      'sw-precache=' + param;
 
     return urlWithCacheBusting.toString();
   };
@@ -125,36 +125,47 @@ function deleteAllCaches() {
 }
 
 self.addEventListener('install', function(event) {
-  var now = Date.now();
-
   event.waitUntil(
-    caches.keys().then(function(allCacheNames) {
-      return Promise.all(
-        Object.keys(CurrentCacheNamesToAbsoluteUrl).filter(function(cacheName) {
-          return allCacheNames.indexOf(cacheName) === -1;
-        }).map(function(cacheName) {
-          var urlWithCacheBusting = getCacheBustedUrl(CurrentCacheNamesToAbsoluteUrl[cacheName],
-            now);
+    // Take a look at each of the cache names we expect for this version.
+    Promise.all(Object.keys(CurrentCacheNamesToAbsoluteUrl).map(function(cacheName) {
+      return caches.open(cacheName).then(function(cache) {
+        // Get a list of all the entries in the specific named cache.
+        // For caches that are already populated for a given version of a
+        // resource, there should be 1 entry.
+        return cache.keys().then(function(keys) {
+          // If there are 0 entries, either because this is a brand new version
+          // of a resource or because the install step was interrupted the
+          // last time it ran, then we need to populate the cache.
+          if (keys.length === 0) {
+            // Use the last bit of the cache name, which contains the hash,
+            // as the cache-busting parameter.
+            // See https://github.com/GoogleChrome/sw-precache/issues/100
+            var cacheBustParam = cacheName.split('-').pop();
+            var urlWithCacheBusting = getCacheBustedUrl(
+              CurrentCacheNamesToAbsoluteUrl[cacheName], cacheBustParam);
 
-          return caches.open(cacheName).then(function(cache) {
-            var request = new Request(urlWithCacheBusting, {credentials: 'same-origin'});
+            var request = new Request(urlWithCacheBusting,
+              {credentials: 'same-origin'});
             return fetch(request).then(function(response) {
               if (response.ok) {
-                return cache.put(CurrentCacheNamesToAbsoluteUrl[cacheName], response);
+                return cache.put(CurrentCacheNamesToAbsoluteUrl[cacheName],
+                  response);
               }
 
-              console.error('Request for %s returned a response with status %d, so not attempting to cache it.',
+              console.error('Request for %s returned a response status %d, ' +
+                'so not attempting to cache it.',
                 urlWithCacheBusting, response.status);
               // Get rid of the empty cache if we can't add a successful response to it.
               return caches.delete(cacheName);
             });
-          });
-        })
-      ).then(function() {
-        return Promise.all(
-          allCacheNames.filter(function(cacheName) {
-            return cacheName.indexOf(CacheNamePrefix) === 0 &&
-                   !(cacheName in CurrentCacheNamesToAbsoluteUrl);
+          }
+        });
+      });
+    })).then(function() {
+      return caches.keys().then(function(allCacheNames) {
+        return Promise.all(allCacheNames.filter(function(cacheName) {
+          return cacheName.indexOf(CacheNamePrefix) === 0 &&
+            !(cacheName in CurrentCacheNamesToAbsoluteUrl);
           }).map(function(cacheName) {
             return caches.delete(cacheName);
           })

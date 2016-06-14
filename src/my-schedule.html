@@ -262,7 +262,7 @@
 
 
      filterStations: function(route, direction) {
-       var stations = app.stations.filter(s => {
+       var stations = app.stations.filter(function(s) {
          return s.route == route && s.direction == direction;
        });
 
@@ -271,7 +271,7 @@
      },
 
      largestSubVec: function(coll) {
-       return coll.reduce((n, arr) => {
+       return coll.reduce(function(n, arr) {
          var size = arr.length;
          return n > size? n : size;
        });
@@ -300,7 +300,7 @@
      // TODO: double-check target field platform 1 times
      fetchSchedule: function(route, direction, day) {
        var data = this.scheduleData,
-           matched = app.stations.filter(s => {
+           matched = app.stations.filter(function(s) {
              return s.direction == direction && s.route == route;
            });
 
@@ -315,11 +315,11 @@
          return 0;
        });
 
-       this.titles = matched.map(s => {
+       this.titles = matched.map(function(s) {
          return s.title;
        });
 
-       var schedules = matched.map(s => {
+       var schedules = matched.map(function(s) {
          var id = s.id;
          return data[id][day];
        });

@@ -84,19 +84,21 @@
       * @param {Array<Strings>} stations A list of stations names
       */
      _closestStation: function(stations) {
+       var _this = this;
+
        // ignore this feature if it's not supported by the browser or location isn't used
        if (!"geolocation" in navigator || this.useLocation != true || stations.length == 0) return;
 
-       navigator.geolocation.getCurrentPosition(position => {
+       navigator.geolocation.getCurrentPosition(function(position) {
          var lat = position.coords.latitude,
              long = position.coords.longitude;
 
-         var stationRecords = app.stations.filter(s => {
+         var stationRecords = app.stations.filter(function(s) {
            return stations.indexOf(s.title) != -1;
          });
 
-         var closestStation = stationRecords.reduce((prev, cur) => {
-           var newDist = this._distance(lat, long, cur.latitude, cur.longitude);
+         var closestStation = stationRecords.reduce(function(prev, cur) {
+           var newDist = _this._distance(lat, long, cur.latitude, cur.longitude);
 
            if (newDist < prev.distance || !prev.distance) {
              cur.distance = newDist;
@@ -107,7 +109,7 @@
          });
 
          var index = stations.indexOf(closestStation.title);
-         this.$.box.selected = index;
+         _this.$.box.selected = index;
        });
      }
    });

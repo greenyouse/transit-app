@@ -247,7 +247,7 @@
       },
 
       filterStations: function(route, direction) {
-        var stations = app.stations.filter(s => {
+        var stations = app.stations.filter(function(s) {
           return s.route == route && s.direction == direction;
         });
 
@@ -270,7 +270,7 @@
 
       offlineSchedule: function(route, direction, station) {
         var data = this.scheduleData,
-            id = app.stations.filter(s => {
+            id = app.stations.filter(function(s) {
               return s.direction == direction && s.route == route && s.title == station;
             })[0].id,
             day = this.weekPeriod(),
@@ -278,14 +278,14 @@
 
         var times = data[id][day]
 
-        times.filter(t => {
+        times.filter(function(t) {
           var time = moment(t, "HH:mm").toDate();
           return time > date;
         });
 
         times = times.slice(0,5);
 
-        var times = times.map(t => {
+        var times = times.map(function(t) {
           return moment(t, "HH:mm").format("hh:mm:a");
         });
 
@@ -298,30 +298,32 @@
       },
 
       fetchDepartures: function(route, direction, station) {
+        var _this = this;
+
         if (station == "")
           return ;
         if (!this.online)
           return this.offlineSchedule(route, direction, station);
 
-        var stationID = app.stations.filter(s => {
+        var stationID = app.stations.filter(function(s) {
           return s.direction == direction && s.title == station;
         })[0].id;
 
         var url = new URL("http://svc.metrotransit.org/NexTrip/" + stationID + "?format=json");
 
-        fetch(url).then(resp => {
-          resp.json().then(trips => {
+        fetch(url).then(function(resp) {
+          resp.json().then(function(trips) {
             var next = trips[0].DepartureText;
             if (next == "Due") next = "now";
 
             // switch back to online mode when the request works
             app.online = true;
-            this.nextTrip = next;
-            this.departureTimes = trips;
-            this.currentTime = moment().format("hh:mm:a");
-            this.tripLoaded = true;
+            _this.nextTrip = next;
+            _this.departureTimes = trips;
+            _this.currentTime = moment().format("hh:mm:a");
+            _this.tripLoaded = true;
           })
-        }).catch(e => {
+        }).catch(function(e) {
           // fallback to offline mode when the network is down
           app.online = false;
         });

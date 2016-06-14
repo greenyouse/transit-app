@@ -150,7 +150,7 @@
 
   // generate station names without any duplicates
   app.listStations = function(stations) {
-    var titles = stations.map(s => {
+    var titles = stations.map(function(s) {
       return s.title;
     });
 

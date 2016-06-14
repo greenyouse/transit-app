@@ -463,7 +463,7 @@
 
        var times = data[stationID][day]
 
-       var nextTrip = times.filter(t => {
+       var nextTrip = times.filter(function(t) {
          var time = moment(t, "HH:mm").toDate();
          return time > date;
        })[0];

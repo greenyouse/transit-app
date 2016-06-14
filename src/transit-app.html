@@ -156,9 +156,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
 
     <iron-pages role="main" selected="{{page}}" attr-for-selected="name">
-      <my-planner name="planner" schedule-data="{{scheduleData}}"></my-planner>
+      <my-planner name="planner" online="{{online}}" schedule-data="{{scheduleData}}"></my-planner>
       <my-schedule name="schedule" schedule-data="{{scheduleData}}"></my-schedule>
-      <my-next name="next" schedule-data="{{scheduleData}}"></my-next>
+      <my-next name="next" online="{{online}}" schedule-data="{{scheduleData}}"></my-next>
     </iron-pages>
 
     <iron-ajax url="schedule.json" last-response="{{scheduleData}}" auto></iron-ajax>
@@ -197,7 +197,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
        scheduleData: {
          type: Array
+       },
+
+       online: {
+         type: Boolean,
+         value: function() {
+           return app.online;
+         },
+         notify: true
        }
+     },
+
+     listeners: {
+       'online': '_toggleOnline',
+       'offline': '_toggleOnline'
      },
 
      observers: [
@@ -221,8 +234,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
      _toggleDrawer: function() {
        this.drawerOpened = !this.drawerOpened;
-     }
+     },
 
+     _toggleOnline: function() {
+       this.online = app.online;
+     }
    });
 
   </script>

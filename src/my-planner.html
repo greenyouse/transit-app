@@ -205,8 +205,8 @@
             </div>
           </div>
 
-          <div hidden$="[[online]]">
-            <template is="dom-if" if="[[directionsLoaded]]">
+          <div hidden$="[[!directionsLoaded]]">
+            <template is="dom-if" if="[[!online]]">
               <div class="flex layout wrap vertical center center-justified">
                 <h5 class="warning">App is offline. Actual departure times may vary.</h5>
                 <h3>Trip Directions:</h3>
@@ -219,8 +219,8 @@
             </template>
           </div>
 
-          <div hidden$="[[!online]]">
-            <template is="dom-if" if="[[directionsLoaded]]">
+          <div hidden$="[[!directionsLoaded]]">
+            <template is="dom-if" if="[[online]]">
               <h3>Trip Directions:</h3>
               <div class="menu__row--map">
                 <google-map map="{{map}}"></google-map>
@@ -349,6 +349,7 @@
      },
 
      observers: [
+       '_toggleNetwork(online)',
        '_setTimeType(_timeType)',
        '_setCoords(startAddress, endAddress)',
        '_offlineDirections(startAddress, endAddress, departureTime)'
@@ -356,6 +357,16 @@
 
      ready: function() {
        this.online = app.online;
+     },
+
+     /**
+      * Toggle between online and offline directions based on network conectivity
+      *
+      * @param {Boolean} online
+      */
+     _toggleNetwork: function(online) {
+       if (!online)
+         this._offlineDirections(this.startAddress, this.endAddress, this.departureTime);
      },
 
      /**

@@ -227,11 +227,15 @@
       },
 
       observers: [
+        '_toggleOffline(online)',
         'displayDirection(route)',
         'filterStations(route, direction)',
         'fetchDepartures(route, direction, station)'
       ],
 
+      _toggleOffline: function() {
+        this.fetchDepartures(this.route, this.direction, this.station);
+      },
 
       /**
        * Show North/South or East/West directions depending on the route
@@ -297,7 +301,7 @@
         if (station == "")
           return ;
         if (!this.online)
-          this.offlineSchedule(route, direction, station);
+          return this.offlineSchedule(route, direction, station);
 
         var stationID = app.stations.filter(s => {
           return s.direction == direction && s.title == station;
@@ -310,13 +314,16 @@
             var next = trips[0].DepartureText;
             if (next == "Due") next = "now";
 
+            // switch back to online mode when the request works
+            app.online = true;
             this.nextTrip = next;
             this.departureTimes = trips;
             this.currentTime = moment().format("hh:mm:a");
             this.tripLoaded = true;
           })
         }).catch(e => {
-          console.log("error fetching departures: " + e);
+          // fallback to offline mode when the network is down
+          app.online = false;
         });
       }
 

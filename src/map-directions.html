@@ -251,10 +251,17 @@ Fired whenever the directions service returns a result.
         waypoints: this.waypoints,
         transitOptions: this.transitOptions
       };
+
       this.directionsService.route(request, function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
+          // switch back to online mode when the request works
+          app.online = true;
           this.response = response;
           this.fire('google-map-response', {response: response});
+        } else {
+          // fallback to offline mode when the network is down
+          app.online = false;
+          return ;
         }
       }.bind(this));
     }

@@ -1,8 +1,5 @@
 {
   "name": "app-drawer-template",
-  "authors": [
-    "The Polymer Authors"
-  ],
   "private": true,
   "dependencies": {
     "app-layout": "polymerelements/app-layout#^0.9.0",

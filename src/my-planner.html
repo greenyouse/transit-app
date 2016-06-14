@@ -122,6 +122,11 @@
          width: 100px;
      }
 
+     .flex {
+         -webkit-flex-basis: auto !important;
+         flex-basis: auto !important;
+     }
+
      @media screen and (min-width: 1440px) {
          section {
              margin-right: 10%;
@@ -202,12 +207,15 @@
 
           <div hidden$="[[online]]">
             <template is="dom-if" if="[[directionsLoaded]]">
-              <h5 class="warning">App is offline. Actual departure times may vary.</h5>
-              <table class="flex layout wrap vertical center center-justified">
-                <template is="dom-repeat" items="[[offlineDirections]]" as="step">
-                  <tr><td>[[step]]</td></tr>
-                </template>
-              </table>
+              <div class="flex layout wrap vertical center center-justified">
+                <h5 class="warning">App is offline. Actual departure times may vary.</h5>
+                <h3>Trip Directions:</h3>
+                <table class="flex layout wrap vertical center center-justified">
+                  <template is="dom-repeat" items="[[offlineDirections]]" as="step">
+                    <tr><td>[[step]]</td></tr>
+                  </template>
+                </table>
+              </div>
             </template>
           </div>
 

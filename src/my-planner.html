@@ -504,7 +504,6 @@
       * @return String The direction: N,S,E,W
       */
      _getDirection: function(origin, destination) {
-       console.log(origin, destination);
        if (origin.route == destination.route || this._sharedStationCheck(destination)) {
          return this._sameRouteDirection(origin, destination);
        } else {

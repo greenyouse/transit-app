@@ -29,7 +29,7 @@
 
 
 /* eslint-disable quotes, comma-spacing */
-var PrecacheConfig = [["/transit-app/index.html","6eebdf58e388dcc7a1d537274b9e51e1"],["/transit-app/src/my-next.html","185c21614ec8ec03d36957600ba07d8b"],["/transit-app/src/my-planner.html","62d80833f6564e72d3a5ff501ed40393"],["/transit-app/src/my-schedule.html","4d2a1be32558eff04998cdfdaac38f57"],["/transit-app/src/transit-app-app.html","2b7cd8d972cb98c37d6cdd8523e6e8e2"]];
+var PrecacheConfig = [["/transit-app/index.html","6eebdf58e388dcc7a1d537274b9e51e1"],["/transit-app/src/my-next.html","185c21614ec8ec03d36957600ba07d8b"],["/transit-app/src/my-planner.html","62d80833f6564e72d3a5ff501ed40393"],["/transit-app/src/my-schedule.html","4d2a1be32558eff04998cdfdaac38f57"],["/transit-app/src/transit-app.html","2b7cd8d972cb98c37d6cdd8523e6e8e2"]];
 /* eslint-enable quotes, comma-spacing */
 var CacheNamePrefix = 'sw-precache-v1--' + (self.registration ? self.registration.scope : '') + '-';
 

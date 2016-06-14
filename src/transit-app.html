@@ -777,16 +777,16 @@ for(n in this._instanceProps)e._addPropertyEffect(n,"function",this._createInsta
     </template>
 
     <iron-pages role="main" selected="{{page}}" attr-for-selected="name">
-      <my-planner name="planner" schedule-data="{{scheduleData}}"></my-planner>
+      <my-planner name="planner" online="{{online}}" schedule-data="{{scheduleData}}"></my-planner>
       <my-schedule name="schedule" schedule-data="{{scheduleData}}"></my-schedule>
-      <my-next name="next" schedule-data="{{scheduleData}}"></my-next>
+      <my-next name="next" online="{{online}}" schedule-data="{{scheduleData}}"></my-next>
     </iron-pages>
 
     <iron-ajax url="schedule.json" last-response="{{scheduleData}}" auto=""></iron-ajax>
 
   </template>
 
-  <script>Polymer({is:"transit-app",properties:{page:{type:String,reflectToAttribute:!0,observer:"_pageChanged"},routeData:{type:Object},route:{type:Object},subroute:{type:Object},smallScreen:{type:Boolean},scheduleData:{type:Array}},observers:["_routePageChanged(routeData.page)"],ready:function(){this.page="planner"},_routePageChanged:function(e){this.page=e||"planner"},_pageChanged:function(e){this.importHref(this.resolveUrl("my-"+e+".html"),null,null,!0)},_toggleDrawer:function(){this.drawerOpened=!this.drawerOpened}});</script>
+  <script>Polymer({is:"transit-app",properties:{page:{type:String,reflectToAttribute:!0,observer:"_pageChanged"},routeData:{type:Object},route:{type:Object},subroute:{type:Object},smallScreen:{type:Boolean},scheduleData:{type:Array},online:{type:Boolean,value:function(){return app.online},notify:!0}},listeners:{online:"_toggleOnline",offline:"_toggleOnline"},observers:["_routePageChanged(routeData.page)"],ready:function(){this.page="planner"},_routePageChanged:function(e){this.page=e||"planner"},_pageChanged:function(e){this.importHref(this.resolveUrl("my-"+e+".html"),null,null,!0)},_toggleDrawer:function(){this.drawerOpened=!this.drawerOpened},_toggleOnline:function(){this.online=app.online}});</script>
 
 </dom-module>
 </body></html>

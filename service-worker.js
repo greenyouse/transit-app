@@ -29,7 +29,7 @@
 
 
 /* eslint-disable quotes, comma-spacing */
-var PrecacheConfig = [["/bower_components/webcomponentsjs/webcomponents-lite.min.js","a1882f82ebfc212658591b4e817d8e03"],["/index.html","6eebdf58e388dcc7a1d537274b9e51e1"],["/manifest.json","273d284cdbe7fdf257681da0fa712cd6"],["/src/my-next.html","185c21614ec8ec03d36957600ba07d8b"],["/src/my-planner.html","6af67ded313977393ec331563e93c77e"],["/src/my-schedule.html","4d2a1be32558eff04998cdfdaac38f57"],["/src/transit-app.html","5fc1567f9b391c7fdbc3d6ffaf9f6af6"]];
+var PrecacheConfig = [["/bower_components/webcomponentsjs/webcomponents-lite.min.js","a1882f82ebfc212658591b4e817d8e03"],["/images/app-icon-144.png","6091833a43704e8f80a48a31e394e3ac"],["/images/app-icon-32.png","d6c1acdef48c57652d8d451ecdfdf7f1"],["/images/app-icon.svg","07a39c391d5fe67c263b3c127a28cfa5"],["/index.html","6eebdf58e388dcc7a1d537274b9e51e1"],["/manifest.json","273d284cdbe7fdf257681da0fa712cd6"],["/src/app.js","7558722ba8b3d458d58db8f7d3c49d7c"],["/src/map-directions.html","800dff9e0fa389730b433e31753caff5"],["/src/my-icons.html","82f6bf7865c1894eef2caa54a23fb7e1"],["/src/my-next.html","185c21614ec8ec03d36957600ba07d8b"],["/src/my-planner.html","6af67ded313977393ec331563e93c77e"],["/src/my-schedule.html","4d2a1be32558eff04998cdfdaac38f57"],["/src/schedule.json","342d8950488b0e1d438328601fa7f4c4"],["/src/station-list.html","4a8a76f23ceb09afdc9ef1f884b15fad"],["/src/transit-app.html","2b7cd8d972cb98c37d6cdd8523e6e8e2"]];
 /* eslint-enable quotes, comma-spacing */
 var CacheNamePrefix = 'sw-precache-v1--' + (self.registration ? self.registration.scope : '') + '-';
 

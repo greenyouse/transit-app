@@ -421,7 +421,6 @@ return e=L(e),this[e+"s"]()}function Kn(e){return function(){return this._data[e
       * @return String The direction: N,S,E,W
       */
      _getDirection: function(origin, destination) {
-       console.log(origin, destination);
        if (origin.route == destination.route || this._sharedStationCheck(destination)) {
          return this._sameRouteDirection(origin, destination);
        } else {

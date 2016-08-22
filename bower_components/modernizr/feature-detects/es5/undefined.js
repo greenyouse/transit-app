@@ -1,1 +1,1 @@
-define(["Modernizr"],function(n){n.addTest("es5undefined",function(){var n,d;try{d=window.undefined,window.undefined=12345,n="undefined"==typeof window.undefined,window.undefined=d}catch(e){return!1}return n})});
+define(["Modernizr"],function(n){n.addTest("es5undefined",function(){var n,d;try{d=window.undefined,window.undefined=12345,n="undefined"==typeof window.undefined,window.undefined=d}catch(n){return!1}return n})});

@@ -1,1 +1,1 @@
-define(["Modernizr","createElement","test/canvas"],function(e,n){e.addTest("canvasblending",function(){if(e.canvas===!1)return!1;var t=n("canvas").getContext("2d");try{t.globalCompositeOperation="screen"}catch(a){}return"screen"===t.globalCompositeOperation})});
+define(["Modernizr","createElement","test/canvas"],function(e,n){e.addTest("canvasblending",function(){if(e.canvas===!1)return!1;var t=n("canvas").getContext("2d");try{t.globalCompositeOperation="screen"}catch(e){}return"screen"===t.globalCompositeOperation})});

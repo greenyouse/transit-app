@@ -1,1 +1,1 @@
-module.exports={staticFileGlobs:["/index.html","/manifest.json","/bower_components/webcomponentsjs/webcomponents-lite.min.js","src/*","/images/*"],navigateFallback:"/index.html"};
+module.exports={staticFileGlobs:["/transit-app/index.html","/transit-app/manifest.json","/transit-app/bower_components/webcomponentsjs/webcomponents-lite.min.js","src/*","/transit-app/images/*"],navigateFallback:"/transit-app/index.html"};

@@ -307,7 +307,7 @@
           return s.direction == direction && s.title == station;
         })[0].id;
 
-        var url = new URL("http://svc.metrotransit.org/NexTrip/" + stationID + "?format=json");
+        var url = new URL("https://svc.metrotransit.org/NexTrip/" + stationID + "?format=json");
 
         fetch(url).then(function(resp) {
           resp.json().then(function(trips) {

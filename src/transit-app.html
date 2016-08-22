@@ -582,12 +582,12 @@ this.currentTarget=t,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
   <template>
     <style include="paper-dropdown-menu-shared-styles"></style>
 
-    
+
     <span role="button"></span>
     <paper-menu-button id="menuButton" vertical-align="[[verticalAlign]]" horizontal-align="[[horizontalAlign]]" vertical-offset="[[_computeMenuVerticalOffset(noLabelFloat)]]" disabled="[[disabled]]" no-animations="[[noAnimations]]" on-iron-select="_onIronSelect" on-iron-deselect="_onIronDeselect" opened="{{opened}}" close-on-activate="" allow-outside-scroll="[[allowOutsideScroll]]">
       <div class="dropdown-trigger">
         <paper-ripple></paper-ripple>
-        
+
         <paper-input type="text" invalid="[[invalid]]" readonly="" disabled="[[disabled]]" value="[[selectedItemLabel]]" placeholder="[[placeholder]]" error-message="[[errorMessage]]" always-float-label="[[alwaysFloatLabel]]" no-label-float="[[noLabelFloat]]" label="[[label]]">
           <iron-icon icon="paper-dropdown-menu:arrow-drop-down" suffix=""></iron-icon>
         </paper-input>
@@ -657,14 +657,14 @@ this.currentTarget=t,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
           <paper-icon-button class="menu-btn" icon="menu" on-tap="_toggleDrawer" aria-label="App Menu">
           </paper-icon-button>
         </div>
-        <div class="logo" title=""><a href="/" aria-label="Transit Home">Twin Cities Transit</a></div>
+        <div class="logo" title=""><a href="/transit-app/" aria-label="Transit Home">Twin Cities Transit</a></div>
       </app-toolbar>
     </app-header>
 
-    
+
     <div id="tabContainer">
       <template is="dom-if" if="[[!smallScreen]]">
-        
+
         <paper-tabs selected="{{page}}" attr-for-selected="name">
           <paper-tab name="planner">
             <iron-icon icon="maps:directions-transit"></iron-icon>
@@ -679,7 +679,7 @@ this.currentTarget=t,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
       </template>
     </div>
 
-    
+
     <template is="dom-if" if="[[smallScreen]]">
       <app-drawer opened="{{drawerOpened}}" swipe-open="" tabindex="0">
         <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">

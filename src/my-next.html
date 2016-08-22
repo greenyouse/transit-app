@@ -123,17 +123,13 @@
                 <th scope="col">Route</th><th scope="col">Departs</th>
               </thead>
             </tr>
+
             <template is="dom-if" if="[[online]]">
               <template is="dom-repeat" items="[[departureTimes]]" as="trip">
                 <tr><td>[[trip.Description]]</td><td>[[trip.DepartureText]]</td></tr>
               </template>
             </template>
 
-            <template is="dom-if" if="[[!online]]">
-              <template is="dom-repeat" items="[[departureTimes]]" as="trip">
-                <tr><td>[[route]]</td><td>[[trip]]</td></tr>
-              </template>
-            </template>
           </table>
         </section>
       </div>
@@ -268,15 +264,12 @@
         return "Weekday";
       },
 
-      offlineSchedule: function(route, direction, station) {
+      offlineSchedule: function(route, direction, station, stationId) {
         var data = this.scheduleData,
-            id = app.stations.filter(function(s) {
-              return s.direction == direction && s.route == route && s.title == station;
-            })[0].id,
             day = this.weekPeriod(),
             date = new Date();
 
-        var times = data[id][day]
+        var times = data[stationId][day]
 
         times.filter(function(t) {
           var time = moment(t, "HH:mm").toDate();
@@ -285,12 +278,17 @@
 
         times = times.slice(0,5);
 
-        var times = times.map(function(t) {
+        times = times.map(function(t) {
           return moment(t, "HH:mm").format("hh:mm:a");
         });
 
+        var trips = times.reduce(function(prev, time) {
+          prev.push({Description: route, DepartureText: time});
+          return prev;
+        }, []);
+
         this.nextTrip = times[0];
-        this.departureTimes = times;
+        this.departureTimes = trips;
         this.currentTime = moment().format("hh:mm:a");
         this.tripLoaded = true;
 
@@ -300,31 +298,46 @@
       fetchDepartures: function(route, direction, station) {
         var _this = this;
 
-        if (station == "")
+        if (station == "" || station === undefined)
           return ;
 
-        var stationID = app.stations.filter(function(s) {
+        var stationData = app.stations.filter(function(s) {
           return s.direction == direction && s.title == station;
-        })[0].id;
+        })[0];
 
-        var url = new URL("https://svc.metrotransit.org/NexTrip/" + stationID + "?format=json");
+        // don't render if there isn't a station
+        if (stationData === undefined) return;
+
+        var stationId = stationData.id;
+
+        var url = new URL("https://svc.metrotransit.org/NexTrip/" + stationId + "?format=json");
 
         fetch(url).then(function(resp) {
           resp.json().then(function(trips) {
-            var next = trips[0].DepartureText;
-            if (next == "Due") next = "now";
 
-            // switch back to online mode when the request works
-            app.online = true;
-            _this.nextTrip = next;
-            _this.departureTimes = trips;
-            _this.currentTime = moment().format("hh:mm:a");
-            _this.tripLoaded = true;
+            if (trips.length == 0) {
+
+              // Empty results are given when no more trips are on that day.
+              // Handle this by going into offline mode to see next day's trips.
+              _this.offlineSchedule(route, direction, station, stationId);
+            } else {
+
+              // trip times returned, render them
+              var next = trips[0].DepartureText;
+              if (next == "Due") next = "now";
+
+              // switch back to online mode when the request works
+              app.online = true;
+              _this.nextTrip = next;
+              _this.departureTimes = trips;
+              _this.currentTime = moment().format("hh:mm:a");
+              _this.tripLoaded = true;
+            }
           })
         }).catch(function(e) {
           // fallback to offline mode when the network is down
           app.online = false;
-          _this.offlineSchedule(route, direction, station);
+          _this.offlineSchedule(route, direction, station, stationId);
         });
       }
 

@@ -228,8 +228,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
      _pageChanged: function(page) {
        // load page import on demand.
-       this.importHref(
-         this.resolveUrl('my-' + page + '.html'), null, null, true);
+       if (page != "transit-app")
+         this.importHref(
+           this.resolveUrl('my-' + page + '.html'), null, null, true);
      },
 
      _toggleDrawer: function() {

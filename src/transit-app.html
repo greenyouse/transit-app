@@ -700,7 +700,7 @@ this.currentTarget=t,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
 
   </template>
 
-  <script>Polymer({is:"transit-app",properties:{page:{type:String,reflectToAttribute:!0,observer:"_pageChanged"},routeData:{type:Object},route:{type:Object},subroute:{type:Object},smallScreen:{type:Boolean},scheduleData:{type:Array},online:{type:Boolean,value:function(){return app.online},notify:!0}},listeners:{online:"_toggleOnline",offline:"_toggleOnline"},observers:["_routePageChanged(routeData.page)"],ready:function(){this.page="planner"},_routePageChanged:function(e){this.page=e||"planner"},_pageChanged:function(e){this.importHref(this.resolveUrl("my-"+e+".html"),null,null,!0)},_toggleDrawer:function(){this.drawerOpened=!this.drawerOpened},_toggleOnline:function(){this.online=app.online}});</script>
+  <script>Polymer({is:"transit-app",properties:{page:{type:String,reflectToAttribute:!0,observer:"_pageChanged"},routeData:{type:Object},route:{type:Object},subroute:{type:Object},smallScreen:{type:Boolean},scheduleData:{type:Array},online:{type:Boolean,value:function(){return app.online},notify:!0}},listeners:{online:"_toggleOnline",offline:"_toggleOnline"},observers:["_routePageChanged(routeData.page)"],ready:function(){this.page="planner"},_routePageChanged:function(e){this.page=e||"planner"},_pageChanged:function(e){"transit-app"!=e&&this.importHref(this.resolveUrl("my-"+e+".html"),null,null,!0)},_toggleDrawer:function(){this.drawerOpened=!this.drawerOpened},_toggleOnline:function(){this.online=app.online}});</script>
 
 </dom-module>
 </body></html>

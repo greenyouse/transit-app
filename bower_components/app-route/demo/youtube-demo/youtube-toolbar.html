@@ -1,7 +1,8 @@
-<html><head><link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../paper-styles/shadow.html">
-<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../iron-icons/iron-icons.html">
+<html><head><link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../paper-styles/shadow.html">
+<link rel="import" href="../../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../iron-icons/iron-icons.html">
+
 </head><body><dom-module id="youtube-toolbar">
   <template>
     <style>:host{display:block;position:relative;--paper-icon-button-ink-color:#fff;--iron-icon-fill-color:#fff;}:host([collapsed]) #background{transform:scaleY(calc(60/230));}:host([collapsed]) #youtube-logo{transform:scale(calc(60/230)) translateY(-195px);}:host([collapsed]) #back{transform:translateX(0);}:host([collapsed]) #content{opacity:0;transition-delay:0s;transform:translateY(-10px);}#background{height:230px;background-image:linear-gradient(#E7291A, #C21616);@apply (--shadow-elevation-2dp);transform-origin:0 0;transition:transform 0.3s;transform:scaleY(1);}#youtube-logo{display:block;position:absolute;margin:auto;top:30px;left:calc(50% - 75px);width:150px;height:calc(150px / 1.45);background-image:radial-gradient(transparent 50%, #fff 50%);border-radius:9% / 13%;transition:transform 0.3s;}#youtube-logo:before,
@@ -17,7 +18,7 @@
     <div id="content">
       <content></content>
     </div>
-    <a id="back" href="./#/search/"><paper-icon-button icon="icons:arrow-back"></paper-icon-button></a>
+    <a id="back" href="../#/search/"><paper-icon-button icon="icons:arrow-back"></paper-icon-button></a>
   </template>
   <script>Polymer({is:"youtube-toolbar"});</script>
 </dom-module>

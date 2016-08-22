@@ -1,16 +1,14 @@
-<html><head><link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../paper-styles/color.html">
-<link rel="import" href="../../paper-styles/typography.html">
-<link rel="import" href="../../paper-input/paper-input.html">
-<link rel="import" href="../../iron-ajax/iron-ajax.html">
+<html><head><link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../paper-input/paper-input.html">
+<link rel="import" href="../../../iron-ajax/iron-ajax.html">
 
-<link rel="import" href="../app-route.html">
+<link rel="import" href="../../app-route.html">
+
 <link rel="import" href="route-info.html">
 
 </head><body><dom-module id="youtube-search">
   <template>
-    <style>:host{--primary-color:#fff;--paper-input-container-color:#fff;display:block;position:relative;padding:1em;@apply (--paper-font-common-base);}route-info{color:#fff;}</style>
+    <style>:host{--primary-color:#fff;--paper-input-container-color:#fff;display:block;position:relative;padding:1em;}route-info{color:#fff;}</style>
 
     
     <app-route route="{{route}}" pattern="/:searchQuery" data="{{data}}">

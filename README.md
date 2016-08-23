@@ -4,14 +4,13 @@ An application for navigating the train system in the Twin Cities. Built
 for Udacity's Senior Web Developer Nanodegree.
 
 
-## What's so great?
+## Features
 
 This is a
 [Progressive Web App](https://en.wikipedia.org/wiki/Progressive_web_app)
-and comes with many of the features you would expect to see from a PWA.
+and comes with many of the things you would expect to see from a PWA.
 
-If you're not familiar with progressive web apps, here are some of the
-neat features that this app has:
+Here's an overview of some of the cool features in this app:
 
 - an app shell architecture (for fast start-up times)
 - a service worker for caching data and updating the app
